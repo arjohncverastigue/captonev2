@@ -1,13 +1,14 @@
 <?php
 session_start();
 include 'conn.php';
+require 'send_reset_email.php'; // PHPMailer function
 
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
 
-    // Check if email exists in auth table for any role
+    // Find user in auth and users tables
     $query = "SELECT a.user_id, u.first_name, a.role FROM auth a
               JOIN users u ON a.user_id = u.id
               WHERE a.email = :email";
@@ -19,32 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Generate secure token
         $token = bin2hex(random_bytes(50));
 
-        // Store token
+        // Save token
         $update = $pdo->prepare("UPDATE auth SET reset_token = :token WHERE email = :email");
         $update->execute(['token' => $token, 'email' => $email]);
 
-        // Generate reset link
-        $resetLink = "http://localhost/capstonev2/reset_password.php?token=" . $token;
+        // Create reset link
+        $resetLink = "http://localhost/capstonev2/reset_password.php?token=$token";
 
-        // Styled email preview
-        $message = "
-            <div class='alert success'>
-                Reset link generated successfully. (Preview only, not sent)<br><br>
-                <strong>To:</strong> {$email}<br>
-                <strong>Subject:</strong> Password Reset Request
-            </div>
-            <div class='email-preview'>
-                <h2>LGU Quick Appoint - Password Reset</h2>
-                <p>Hi <strong>{$user['first_name']}</strong> (<em>{$user['role']}</em>),</p>
-                <p>You requested to reset your password. Click below:</p>
-                <p style='text-align: center;'>
-                    <a href='{$resetLink}' class='reset-btn'>Reset Password</a>
-                </p>
-                <p>If this wasn’t you, just ignore this email.</p>
-                <hr>
-                <p class='note'>This is a one-time link. Do not share it.</p>
-            </div>
-        ";
+        // Send email using PHPMailer
+        $result = sendResetEmail($email, $user['first_name'], $resetLink);
+
+        if ($result === true) {
+            $message = "<div class='alert success'>A reset link has been sent to <strong>$email</strong>. Please check your inbox.</div>";
+        } else {
+            $message = "<div class='alert error'>Failed to send email: $result</div>";
+        }
     } else {
         $message = "<div class='alert error'>No account found with that email.</div>";
     }
@@ -120,33 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .error {
             background-color: #f2dede;
             color: #a94442;
-        }
-
-        .email-preview {
-            margin-top: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 14px;
-        }
-
-        .email-preview h2 {
-            color: #2c3e50;
-            font-size: 20px;
-        }
-
-        .reset-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #2980b9;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .note {
-            font-size: 12px;
-            color: #777;
         }
     </style>
 </head>

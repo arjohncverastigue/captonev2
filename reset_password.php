@@ -16,19 +16,19 @@ if (isset($_GET['token'])) {
         $showForm = true;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $newPassword = $_POST['password'];
-            $confirmPassword = $_POST['confirm_password'];
+            $password = $_POST['password'];
+            $confirm = $_POST['confirm_password'];
 
-            if ($newPassword !== $confirmPassword) {
+            if ($password !== $confirm) {
                 $message = "<div class='alert error'>Passwords do not match.</div>";
-            } elseif (strlen($newPassword) < 6) {
+            } elseif (strlen($password) < 6) {
                 $message = "<div class='alert error'>Password must be at least 6 characters long.</div>";
             } else {
-                $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+                $hashed = password_hash($password, PASSWORD_DEFAULT);
                 $update = $pdo->prepare("UPDATE auth SET password = ?, reset_token = NULL WHERE reset_token = ?");
                 $update->execute([$hashed, $token]);
 
-                $message = "<div class='alert success'>Your password has been reset successfully. <a href='login.php'>Login now</a>.</div>";
+                $message = "<div class='alert success'>Password successfully reset. <a href='login.php'>Login here</a>.</div>";
                 $showForm = false;
             }
         }
@@ -52,7 +52,8 @@ if (isset($_GET['token'])) {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
@@ -60,7 +61,7 @@ if (isset($_GET['token'])) {
             padding: 30px 40px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-radius: 10px;
-            max-width: 400px;
+            max-width: 500px;
             width: 100%;
         }
 
