@@ -101,7 +101,7 @@ $completedAppointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
             e.preventDefault();
 
             $.ajax({
-                url: 'residents_feedback.php',
+                url: 'residents_submit_feedback.php',
                 type: 'POST',
                 data: {
                     ajax: true,
