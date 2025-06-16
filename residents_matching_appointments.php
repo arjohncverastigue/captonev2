@@ -45,8 +45,8 @@ if ($ownSchedule && $ownSchedule['scheduled_for'] !== null) {
     <title>My Appointments</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container mt-5">
+<body class="p-4">
+    <div class="container">
         <h3>Appointments Matching Your Schedule</h3>
         <?php if (!empty($ownSchedule) && $ownSchedule['scheduled_for'] !== null): ?>
             <p>Your Schedule: <strong><?php echo date('F d, Y h:i A', strtotime($ownSchedule['scheduled_for'])); ?></strong></p>

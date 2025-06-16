@@ -19,54 +19,11 @@ $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Department List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .container { margin-top: 50px; }
-        .modal-content { background-color: rgba(255, 255, 255, 0.95); }
-
-        #calendar-container {
-            text-align: center;
-        }
-
-        #calendar-header {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        #calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-        }
-
-        .calendar-day {
-            border: 1px solid #ccc;
-            padding: 10px;
-            min-height: 60px;
-            cursor: pointer;
-        }
-
-        .calendar-day div {
-            font-size: 0.75em;
-        }
-
-        .available {
-            background-color: #d4edda;
-        }
-
-        .selected {
-            border: 2px solid #28a745;
-        }
-
-        .calendar-header {
-            font-weight: bold;
-            background-color: #f8f9fa;
-            padding: 5px 0;
-        }
-    </style>
+    
 </head>
-<body>
+<body class="p-4">
 <div class="container">
-    <h2 class="text-center mb-4">Departments</h2>
+    <h3>Departments</h3>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
