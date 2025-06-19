@@ -26,7 +26,7 @@
 
   /* Background image styling */
   body {
-    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80')
+    background: url('images/background.png')  
       no-repeat center center fixed;
     background-size: cover;
     display: flex;
@@ -42,7 +42,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(22, 33, 51, 0.7);
+    background: rgba(255, 255, 255, 0.11);
     z-index: -1;
   }
 
@@ -52,13 +52,15 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 3rem;
-    background: rgba(0, 0, 0, 0.4);
+    background-image: linear-gradient(to right, #0D92F4, #27548A);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
   }
 
   header .logo {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #5de1e6;
+    color:rgb(21, 79, 255);
     letter-spacing: 2px;
     user-select: none;
   }
@@ -70,10 +72,10 @@
   }
 
   nav ul li a {
-    color: #c0e9ff;
+    color:white;
     text-decoration: none;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: color 0.3s ease;
     cursor: pointer;
     padding-bottom: 3px;
@@ -81,8 +83,8 @@
 
   nav ul li a:hover,
   nav ul li a:focus {
-    color: #5de1e6;
-    border-bottom: 2px solid #5de1e6;
+    color:rgb(0, 31, 115);
+    border-bottom: 2px solid #001e65;
   }
 
   /* Main content */
@@ -99,19 +101,21 @@
     font-size: 3rem;
     max-width: 700px;
     line-height: 1.3;
-    text-shadow: 0 0 10px rgba(93, 225, 230, 0.8);
-    color: #aaf3fc;
+    text-shadow: 0 0 10px rgba(18, 147, 151, 0.17);
+    color:#27548A;
   }
 
   /* Footer */
   footer {
-    background: rgba(0, 0, 0, 0.65);
-    padding: 2rem 3rem;
+    background-image: linear-gradient(to right, #0D92F4, #27548A);
+    padding: 0.6rem 3rem;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     font-size: 0.9rem;
     color: #c3dbe8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
   }
 
   footer .about,
@@ -123,7 +127,7 @@
   footer .about h3,
   footer .contacts h3 {
     margin-bottom: 0.75rem;
-    color: #5de1e6;
+    color:rgb(255, 255, 255);
   }
 
   footer .contacts ul {
@@ -140,21 +144,22 @@
   }
 
   footer .contacts ul li i {
-    color: #5de1e6;
+    color:rgb(255, 255, 255);
     font-size: 1.3rem;
     width: 25px;
     text-align: center;
   }
 
   footer .contacts ul li a {
-    color: #c3dbe8;
+    color:rgb(255, 255, 255);
     text-decoration: none;
     transition: color 0.3s ease;
   }
 
   footer .contacts ul li a:hover,
   footer .contacts ul li a:focus {
-    color: #5de1e6;
+    color:rgb(0, 29, 102);
+    
   }
 
   /* Responsive adjustments */
@@ -185,17 +190,16 @@
     footer .contacts {
       max-width: 100%;
     }
+
   }
 </style>
 </head>
 <body>
 <header>
-  <div class="logo" tabindex="0">LGU Quick Appoint</div>
+  <img src="images/LGU_logo_inverted.png" alt="LGU Logo" class="logo" style="width: 70px; height: 70px; border-radius: 50%; margin-top: -16px; margin-bottom: -15px;" tabindex="0">
   <nav>
     <ul>
-      <li><a href="#" tabindex="0">Home</a></li>
-      <li><a href="#" tabindex="0">About</a></li>
-      <li><a href="#" tabindex="0">Contact</a></li>
+      <li><a href="register.php" tabindex="0">Register</a></li>
       <li><a href="login.php" tabindex="0">Login</a></li>
     </ul>
   </nav>
@@ -205,7 +209,7 @@
 </main>
 <footer>
   <section class="about">
-    <h3>About the system</h3>
+    <h3 style="color: white;">About the system</h3>
     <p>
       LGU Quick Appoint is a revolutionary platform designed to streamline appointment scheduling for Local Government Units,
       providing residents with easy access to services and reducing wait times through efficient resource management.
@@ -221,10 +225,6 @@
       <li>
         <i class="fab fa-instagram" aria-hidden="true"></i>
         <a href="https://instagram.com" target="_blank" rel="noopener" tabindex="0">Instagram</a>
-      </li>
-      <li>
-        <i class="fab fa-linkedin-in" aria-hidden="true"></i>
-        <a href="https://linkedin.com" target="_blank" rel="noopener" tabindex="0">LinkedIn</a>
       </li>
       <li>
         <i class="fas fa-envelope" aria-hidden="true"></i>
