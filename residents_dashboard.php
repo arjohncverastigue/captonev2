@@ -143,7 +143,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
         <h4 style="text-align: center; color: white;">Residents Menu</h4>
         <nav class="nav">
             <a href="#" class="nav_link" onclick="loadContent('residents_matching_appointments.php')">
-                <i class='bx bx-calendar'></i> <span>View Appointments</span>
+                <i class='bx bx-calendar'></i> <span>My Appointments</span>
             </a>
             <a href="#" class="nav_link" onclick="loadContent('residents_view_departments.php')">
                 <i class='bx bx-user'></i> <span>View Departments</span>

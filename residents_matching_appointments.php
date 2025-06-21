@@ -1,5 +1,4 @@
 <?php 
-// Backend logic
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
     header("Location: login.php");
@@ -7,78 +6,96 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
 }
 
 include 'conn.php';
-
 $userId = $_SESSION['user_id'];
 
-// Query to get the user's own appointment schedule
-$queryOwnSchedule = "SELECT scheduled_for, status FROM appointments WHERE user_id = :user_id AND status IN ('Confirmed', 'Pending')";
-$stmtOwn = $pdo->prepare($queryOwnSchedule);
-$stmtOwn->execute(['user_id' => $userId]);
-$ownSchedule = $stmtOwn->fetch(PDO::FETCH_ASSOC);
-
-if ($ownSchedule && $ownSchedule['scheduled_for'] !== null) {
-    $scheduleDate = $ownSchedule['scheduled_for'];
-
-    // Query to fetch other appointments matching the same schedule
-    $queryMatchingSchedules = "SELECT COUNT(*) AS count, scheduled_for
-                                FROM appointments
-                                WHERE scheduled_for = :scheduled_for 
-                                AND user_id != :user_id
-                                AND status IN ('Confirmed', 'Pending')
-                                GROUP BY scheduled_for";
-    $stmtMatching = $pdo->prepare($queryMatchingSchedules);
-    $stmtMatching->execute([
-        'scheduled_for' => $scheduleDate,
-        'user_id' => $userId
-    ]);
-    $matchingAppointments = $stmtMatching->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $matchingAppointments = [];
-}
+$queryAppointments = "SELECT a.id, a.scheduled_for, a.status, d.name AS department_name, s.service_name
+                      FROM appointments a
+                      JOIN departments d ON a.department_id = d.id
+                      JOIN department_services s ON a.service_id = s.id
+                      WHERE a.user_id = :user_id AND a.status = 'Pending'
+                      ORDER BY a.scheduled_for ASC";
+$stmt = $pdo->prepare($queryAppointments);
+$stmt->execute(['user_id' => $userId]);
+$appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Appointments</title>
+    <title>My Pending Appointments</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="p-4">
-    <div class="container">
-        <h3>Appointments Matching Your Schedule</h3>
-        <?php if (!empty($ownSchedule) && $ownSchedule['scheduled_for'] !== null): ?>
-            <p>Your Schedule: <strong><?php echo date('F d, Y h:i A', strtotime($ownSchedule['scheduled_for'])); ?></strong></p>
-            <table class="table table-bordered">
-                <thead>
+<div class="container">
+    <h3>My Pending Appointments</h3>
+
+    <?php if (empty($appointments)): ?>
+        <div class="alert alert-info">You have no pending appointments.</div>
+    <?php else: ?>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Transaction No.</th>
+                    <th>Department</th>
+                    <th>Service</th>
+                    <th>Schedule</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($appointments as $index => $appt): ?>
                     <tr>
-                        <th>#</th>
-                        <th>Scheduled For</th>
-                        <th>Number of Appointments</th>
+                        <td><?= $index + 1 ?></td>
+                        <td><?= htmlspecialchars($appt['id']) ?></td>
+                        <td><?= htmlspecialchars($appt['department_name']) ?></td>
+                        <td><?= htmlspecialchars($appt['service_name']) ?></td>
+                        <td><?= date('F d, Y h:i A', strtotime($appt['scheduled_for'])) ?></td>
+                        <td>
+                            <button class="btn btn-sm btn-info" data-toggle="modal"
+                                data-target="#matchModal<?= $appt['id'] ?>">View Matches</button>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($matchingAppointments)): ?>
-                        <?php foreach ($matchingAppointments as $index => $appointment): ?>
-                            <tr>
-                                <td><?php echo $index + 1; ?></td>
-                                <td><?php echo date('F d, Y h:i A', strtotime($appointment['scheduled_for'])); ?></td>
-                                <td><?php echo $appointment['count']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="3" class="text-center">No matching appointments found.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p class="alert alert-warning">You have no scheduled appointments.</p>
-        <?php endif; ?>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="matchModal<?= $appt['id'] ?>" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Matching Appointments</h5>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Your Schedule:</strong><br>
+                                        <?= date('F d, Y h:i A', strtotime($appt['scheduled_for'])) ?>
+                                    </p>
+                                    <hr>
+                                    <?php
+                                    $matchQuery = "SELECT COUNT(*) AS total
+                                                   FROM appointments
+                                                   WHERE scheduled_for = :scheduled_for 
+                                                   AND user_id != :user_id
+                                                   AND status IN ('Pending', 'Confirmed')";
+                                    $matchStmt = $pdo->prepare($matchQuery);
+                                    $matchStmt->execute([
+                                        'scheduled_for' => $appt['scheduled_for'],
+                                        'user_id' => $userId
+                                    ]);
+                                    $matchResult = $matchStmt->fetch();
+                                    ?>
+                                    <p><strong>Matching Appointments:</strong> <?= $matchResult['total'] ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
