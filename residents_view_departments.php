@@ -69,72 +69,85 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$query = "SELECT d.*, GROUP_CONCAT(s.service_name SEPARATOR ', ') AS services
+$query = "SELECT d.*, 
+            GROUP_CONCAT(s.id ORDER BY s.id) AS service_ids, 
+            GROUP_CONCAT(s.service_name ORDER BY s.id SEPARATOR '||') AS service_names
           FROM departments d
           LEFT JOIN department_services s ON d.id = s.department_id
           GROUP BY d.id ORDER BY d.name ASC";
 $stmt = $pdo->query($query);
 $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$reqStmt = $pdo->query("SELECT * FROM service_requirements");
+$requirements = $reqStmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
+$reqMap = [];
+foreach ($requirements as $req) {
+    $reqMap[$req['service_id']][] = $req;
+}
 ?>
 <div class="container">
     <h3 class="mb-4">Departments</h3>
-
     <div class="input-group mb-4">
         <input type="text" class="form-control" id="searchInput" placeholder="Search department or service...">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" id="clearSearch">Clear Filter</button>
         </div>
     </div>
-
     <div class="row" id="departmentList">
-        <?php foreach ($departments as $d): ?>
-            <div class="col-md-4 mb-3 department-card">
-                <div class="card h-100" data-toggle="modal" data-target="#deptModal<?= $d['id'] ?>">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= htmlspecialchars($d['name']) ?></h5>
-                        <p class="card-text"><?= htmlspecialchars($d['description']) ?></p>
-                        <div>
-                            <?php foreach (explode(',', $d['services']) as $svc): ?>
-                                <span class="badge badge-info mr-1 mb-1"><?= htmlspecialchars(trim($svc)) ?></span>
+        <?php foreach ($departments as $d): 
+            $serviceIds = explode(',', $d['service_ids'] ?? '');
+            $serviceNames = explode('||', $d['service_names'] ?? '');
+            $searchString = strtolower($d['name'] . ' ' . $d['description'] . ' ' . implode(' ', $serviceNames));
+        ?>
+        <div class="col-md-4 mb-3 department-card" data-search="<?= htmlspecialchars($searchString) ?>">
+            <div class="card h-100" data-toggle="modal" data-target="#deptModal<?= $d['id'] ?>">
+                <div class="card-body">
+                    <h5 class="card-title"><?= htmlspecialchars($d['name']) ?></h5>
+                    <p class="card-text"><?= htmlspecialchars($d['description']) ?></p>
+                    <div>
+                        <?php foreach ($serviceNames as $svc): ?>
+                            <span class="badge badge-info enlarged-badge"><?= htmlspecialchars(trim($svc)) ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="deptModal<?= $d['id'] ?>" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered custom-width">
+                <div class="modal-content shadow-lg rounded-3 border-0">
+                    <div class="modal-header bg-primary text-white rounded-top">
+                        <h5 class="modal-title font-weight-bold"><?= htmlspecialchars($d['name']) ?></h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <p><strong class="text-secondary">Description:</strong><br><?= htmlspecialchars($d['description']) ?></p>
+                        <p><strong class="text-secondary">Services and Requirements:</strong></p>
+                        <ul>
+                            <?php foreach ($serviceIds as $i => $svcId): ?>
+                            <li>
+                                <strong><?= htmlspecialchars($serviceNames[$i]) ?></strong>
+                                <?php if (!empty($reqMap[$svcId])): ?>
+                                    <ul>
+                                        <?php foreach ($reqMap[$svcId] as $req): ?>
+                                            <li><?= htmlspecialchars($req['requirement']) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php else: ?>
+                                    <div class="text-muted ml-2">No requirements listed.</div>
+                                <?php endif; ?>
+                            </li>
                             <?php endforeach; ?>
+                        </ul>
+                        <div class="text-center">
+                            <button class="btn btn-outline-primary px-4 py-2" data-toggle="modal" data-target="#appointmentModal" data-dismiss="modal" onclick="openBooking(<?= $d['id'] ?>)">Book Appointment</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-    <div class="modal fade" id="deptModal<?= $d['id'] ?>" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered custom-width">
-        <div class="modal-content shadow-lg rounded-3 border-0">
-        <div class="modal-header bg-primary text-white rounded-top">
-            <h5 class="modal-title font-weight-bold"><?= htmlspecialchars($d['name']) ?></h5>
-            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
         </div>
-        <div class="modal-body p-4">
-            <p class="mb-3"><strong class="text-secondary">Description:</strong><br>
-            <span class="text-dark"><?= htmlspecialchars($d['description']) ?></span>
-            </p>
-
-            <p class="mb-2"><strong class="text-secondary">Services Offered:</strong></p>
-            <div class="mb-3">
-            <?php foreach (explode(',', $d['services']) as $svc): ?>
-                <span class="badge badge-pill badge-info mr-1 mb-1 enlarged-badge"><?= htmlspecialchars(trim($svc)) ?></span>
-            <?php endforeach; ?>
-            </div>
-
-            <div class="text-center">
-            <button class="btn btn-outline-primary px-4 py-2" data-toggle="modal" data-target="#appointmentModal"
-                data-dismiss="modal" onclick="openBooking(<?= $d['id'] ?>)">
-                <i class='bx bx-calendar'></i> Book Appointment
-            </button>
-            </div>
-        </div>
-        </div>
-    </div>
-</div>
-
         <?php endforeach; ?>
     </div>
 </div>
@@ -192,7 +205,7 @@ $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <div class="modal-body text-center">
         <p>This is your transaction number:</p>
         <h4 id="transactionNumber" class="text-primary font-weight-bold"></h4>
-        <p class="mt-3">Please remember it and provide it to the assigned personnel when requested.</p>
+        <p class="mt-3">Please remember your transaction number and bring the required documents for the selected service to the assigned personnel when requested.</p>
       </div>
     </div>
   </div>

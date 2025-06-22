@@ -98,9 +98,7 @@ $completedAppointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body class="p-4">
 <div class="container">
     <h3>Submit Feedback</h3>
-    <button type="button" class="btn btn-secondary mb-3" onclick="$('#content-area').load('residents_select_form.php')">
-    ← Back to Form Selector
-    </button>
+    <button type="button" class="btn btn-secondary mb-3" onclick="$('#content-area').load('residents_select_form.php')">← Back to Form Selector</button>
 
     <div id="alert-container"></div>
 
@@ -120,29 +118,98 @@ $completedAppointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="alert alert-info">Please answer the following:</div>
 
+        <!-- Section: THE OFFICE -->
+        <h5 class="mt-4">THE OFFICE</h5>
         <?php
-        $questions = [
+        $office_questions = [
             'q1_office_easy_locate' => '1. Was it easy to locate the office?',
             'q2_office_clean' => '2. Was it clean and orderly?',
             'q3_office_long_line' => '3. Is there a long line of clients?',
-            'q4_office_signs' => '4. Did you find proper directional signs/instructions?',
+            'q4_office_signs' => '4. Did you find proper directional signs/instructions?'
+        ];
+        foreach ($office_questions as $name => $label): ?>
+            <div class="form-group">
+                <label><?= $label ?></label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="1" required> Yes
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="0"> No
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <!-- Section: THE PERSONS RESPONSIBLE -->
+        <h5 class="mt-4">THE PERSONS RESPONSIBLE</h5>
+        <?php
+        $staff_questions = [
             'q1_staff_available' => '1. Were the designated employees available?',
             'q2_staff_respectful' => '2. Were they respectful?',
             'q3_staff_comfortable' => '3. Did they make you feel comfortable?',
             'q4_staff_wait_long' => '4. Did they make you wait long?',
-            'q5_staff_knowledgeable' => '5. Were they knowledgeable?',
+            'q5_staff_knowledgeable' => '5. Were they knowledgeable?'
+        ];
+        foreach ($staff_questions as $name => $label): ?>
+            <div class="form-group">
+                <label><?= $label ?></label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="1" required> Yes
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="0"> No
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <!-- Section: THE REQUIREMENTS -->
+        <h5 class="mt-4">THE REQUIREMENTS</h5>
+        <?php
+        $requirement_questions = [
             'q1_req_informed' => '1. Were you properly informed what you needed to present?',
             'q2_req_many' => '2. Were there many requirements?',
             'q3_req_how_to_get' => '3. Were you informed how to get the requirements?',
-            'q4_req_fee' => '4. Were you made aware of how much you will have to pay?',
+            'q4_req_fee' => '4. Were you made aware of how much you will have to pay?'
+        ];
+        foreach ($requirement_questions as $name => $label): ?>
+            <div class="form-group">
+                <label><?= $label ?></label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="1" required> Yes
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="0"> No
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <!-- Section: THE OFFICERS -->
+        <h5 class="mt-4">THE OFFICERS</h5>
+        <?php
+        $officer_questions = [
             'q1_officer_present' => '1. Were the authorized officials present?',
-            'q2_officer_slow' => '2. Did it take them long to sign the documents?',
+            'q2_officer_slow' => '2. Did it take them long to sign the documents?'
+        ];
+        foreach ($officer_questions as $name => $label): ?>
+            <div class="form-group">
+                <label><?= $label ?></label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="1" required> Yes
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="0"> No
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <!-- Section: THE INFORMATION -->
+        <h5 class="mt-4">THE INFORMATION</h5>
+        <?php
+        $info_questions = [
             'q1_info_available' => '1. Was the document you needed available?',
             'q2_info_complete' => '2. Was the data complete?',
             'q3_info_clear' => '3. Were the instructions clear and short?'
         ];
-
-        foreach ($questions as $name => $label): ?>
+        foreach ($info_questions as $name => $label): ?>
             <div class="form-group">
                 <label><?= $label ?></label><br>
                 <div class="form-check form-check-inline">
