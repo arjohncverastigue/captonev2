@@ -39,22 +39,25 @@ $departments = $stmt->fetchAll();
         </div>
     </div>
 
-    <div class="row">
-        <?php foreach ($departments as $d): ?>
-            <div class="col-md-4 mb-4 dept-card" data-services="<?= strtolower($d['services']) ?>">
-                <div class="card h-100" data-toggle="modal" data-target="#viewModal<?= $d['id'] ?>">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= htmlspecialchars($d['name']) ?></h5>
-                        <?php
-                        $services = array_filter(array_map('trim', explode(',', $d['services'])));
-                        foreach ($services as $svc): ?>
-                            <span class="badge badge-info mr-1 mb-1 service-badge" data-service="<?= strtolower($svc) ?>">
-                                <?= htmlspecialchars($svc) ?>
-                            </span>
-                        <?php endforeach; ?>
-                    </div>
+    <!-- Inside your <div class="row"> -->
+<div class="row">
+    <?php foreach ($departments as $d): 
+        $searchText = strtolower($d['name'] . ' ' . $d['description'] . ' ' . $d['services']);
+    ?>
+        <div class="col-md-4 mb-4 dept-card" data-search="<?= htmlspecialchars($searchText) ?>" data-services="<?= strtolower($d['services']) ?>">
+            <div class="card h-100" data-toggle="modal" data-target="#viewModal<?= $d['id'] ?>">
+                <div class="card-body">
+                    <h5 class="card-title"><?= htmlspecialchars($d['name']) ?></h5>
+                    <?php
+                    $services = array_filter(array_map('trim', explode(',', $d['services'])));
+                    foreach ($services as $svc): ?>
+                        <span class="badge badge-info mr-1 mb-1 service-badge" data-service="<?= strtolower($svc) ?>">
+                            <?= htmlspecialchars($svc) ?>
+                        </span>
+                    <?php endforeach; ?>
                 </div>
             </div>
+        </div>
 
             <!-- View Modal -->
             <div class="modal fade" id="viewModal<?= $d['id'] ?>" tabindex="-1">
@@ -72,6 +75,8 @@ $departments = $stmt->fetchAll();
                                     <li><?= htmlspecialchars($svc) ?></li>
                                 <?php endforeach; ?>
                             </ul>
+                            <button class="btn btn-sm btn-warning mt-2" data-toggle="modal" data-target="#editModal<?= $d['id'] ?>">Edit</button>
+
                         </div>
                     </div>
                 </div>
@@ -198,13 +203,15 @@ $(".editForm").submit(function(e) {
 });
 
 // Live search filter
+// Updated search logic
 $("#searchInput").on("input", function () {
     const val = $(this).val().toLowerCase();
     $(".dept-card").each(function () {
-        const text = $(this).text().toLowerCase();
-        $(this).toggle(text.includes(val));
+        const searchAttr = $(this).data("search");
+        $(this).toggle(searchAttr.includes(val));
     });
 });
+
 
 // Clickable badge filter (multi-select OR)
 $(document).on("click", ".service-badge", function () {

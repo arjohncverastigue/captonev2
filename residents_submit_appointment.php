@@ -77,17 +77,21 @@ try {
     $personnel_id = $personnel['id'];
 
     // Insert appointment
-    $stmt = $pdo->prepare("INSERT INTO appointments (user_id, department_id, service_id, available_date_id, valid_id_path, reason, status, requested_at, personnel_id, scheduled_for) VALUES (?, ?, ?, ?, ?, ?, 'Pending', NOW(), ?, ?)");
-    $stmt->execute([
-        $user_id,
-        $department_id,
-        $service_id,
-        $available_date_id,
-        $targetPath,
-        $reason,
-        $personnel_id,
-        $scheduled_for
-    ]);
+    $stmt = $pdo->prepare("INSERT INTO appointments (
+    user_id, department_id, service_id, available_date_id, valid_id_path, reason, status, requested_at, personnel_id, scheduled_for
+) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)");
+$stmt->execute([
+    $user_id,
+    $department_id,
+    $service_id,
+    $available_date_id,
+    $targetPath,
+    $reason,
+    'Pending', // include status
+    $personnel_id,
+    $scheduled_for
+]);
+
 
     $appointmentId = $pdo->lastInsertId();
 

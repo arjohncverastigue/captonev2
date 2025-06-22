@@ -1,39 +1,30 @@
 <?php
 include 'conn.php';
 
-$id = $_POST['id'] ?? '';
-$name = $_POST['name'] ?? '';
-$description = $_POST['description'] ?? '';
-$services = $_POST['services'] ?? [];
-
-if (!$id || !$name || empty($services)) {
-    http_response_code(400);
-    echo "ID, name, and at least one service are required.";
-    exit();
-}
-
-try {
-    $pdo->beginTransaction();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $deptId = $_POST['id'];
+    $name = $_POST['name'];
+    $desc = $_POST['description'];
+    $services = $_POST['services'];
 
     // Update department
     $stmt = $pdo->prepare("UPDATE departments SET name = ?, description = ? WHERE id = ?");
-    $stmt->execute([$name, $description, $id]);
+    $stmt->execute([$name, $desc, $deptId]);
 
     // Delete old services
-    $pdo->prepare("DELETE FROM department_services WHERE department_id = ?")->execute([$id]);
+    $pdo->prepare("DELETE FROM department_services WHERE department_id = ?")->execute([$deptId]);
 
     // Insert new services
     $svcStmt = $pdo->prepare("INSERT INTO department_services (department_id, service_name) VALUES (?, ?)");
-    foreach ($services as $service) {
-        if (trim($service) !== '') {
-            $svcStmt->execute([$id, trim($service)]);
+    foreach ($services as $svc) {
+        if (trim($svc) !== "") {
+            $svcStmt->execute([$deptId, $svc]);
         }
     }
 
-    $pdo->commit();
-    echo "Updated";
-} catch (Exception $e) {
-    $pdo->rollBack();
-    http_response_code(500);
-    echo "Database error: " . $e->getMessage();
+    echo "success";
+} else {
+    http_response_code(400);
+    echo "Invalid request";
 }
+?>

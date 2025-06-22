@@ -48,13 +48,13 @@ $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="input-group mb-4">
         <input type="text" class="form-control" id="searchInput" placeholder="Search department or service...">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" id="clearSearch">Clear</button>
+            <button class="btn btn-outline-secondary" id="clearSearch">Clear Filter</button>
         </div>
     </div>
 
     <div class="row" id="departmentList">
         <?php foreach ($departments as $d): ?>
-            <div class="col-md-4 mb-3 department-card">
+            <div class="col-md-4 mb-3 department-card" data-search="<?= strtolower($d['name'] . ' ' . $d['description'] . ' ' . $d['services']) ?>">
                 <div class="card h-100" data-toggle="modal" data-target="#deptModal<?= $d['id'] ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($d['name']) ?></h5>
@@ -269,8 +269,8 @@ $('#appointment-form').submit(function(e) {
 $('#searchInput').on('input', function() {
     const val = $(this).val().toLowerCase();
     $('.department-card').each(function() {
-        const text = $(this).text().toLowerCase();
-        $(this).toggle(text.includes(val));
+        const keywords = $(this).data('search');
+        $(this).toggle(keywords.includes(val));
     });
 });
 

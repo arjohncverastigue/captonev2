@@ -148,7 +148,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
             <a href="#" class="nav_link" onclick="loadContent('residents_view_departments.php')">
                 <i class='bx bx-user'></i> <span>View Departments</span>
             </a>
-            <a href="#" class="nav_link" onclick="loadContent('residents_submit_feedback.php')">
+            <a href="#" class="nav_link" onclick="loadContent('residents_select_form.php')">
                 <i class='bx bx-message-square'></i> <span>Feedback</span>
             </a>
             <a href="logout.php" class="nav_link">
