@@ -129,6 +129,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'LGU Personnel') {
             max-width:80%; 
         }
         
+        .header img {
+        object-fit: cover;
+        border: 2px solid #fff;
+        transition: transform 0.2s ease;
+        }
+        .header img:hover {
+            transform: scale(1.05);
+        }
 
     </style>
     <script>
@@ -158,9 +166,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'LGU Personnel') {
 </head>
 <body id="body-pd">
     <!-- Header -->
-    <header class="header" id="header">
-        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-    </header>
+    <header class="header d-flex justify-content-between align-items-center px-3" id="header">
+    <div class="header_toggle"> 
+        <i class='bx bx-menu' id="header-toggle"></i> 
+    </div>
+
+    <!-- Avatar icon for profile -->
+    <div onclick="loadContent('profile.php')" style="cursor: pointer;">
+        <img src="images/default_avatar.png" alt="Avatar" class="rounded-circle" width="35" height="35" title="My Profile">
+    </div>
+</header>
 
     <!-- Sidebar -->
     <div class="l-navbar" id="nav-bar">

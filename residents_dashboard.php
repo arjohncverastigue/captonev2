@@ -155,6 +155,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
     <!-- Header -->
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+
+        <!-- Avatar icon for profile -->
+        <div onclick="loadContent('profile.php')" style="cursor: pointer;">
+            <img src="images/default_avatar.png" alt="Avatar" class="rounded-circle" width="35" height="35" title="My Profile">
+        </div>
     </header>
 
     <!-- Sidebar -->
@@ -171,6 +176,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
             <a href="#" class="nav_link" onclick="loadContent('residents_select_form.php')">
                 <i class='bx bx-message-square'></i> <span>Feedback</span>
             </a>
+
             <a href="logout.php" class="nav_link">
                 <i class='bx bx-log-out'></i> <span>Logout</span>
             </a>

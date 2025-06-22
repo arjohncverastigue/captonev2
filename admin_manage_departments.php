@@ -223,26 +223,31 @@ $(document).on("click", ".remove-service", function () {
 });
 
 // Submit add form
+// Submit add form with confirmation
 $("#addForm").submit(function(e) {
     e.preventDefault();
-    $.post("ajax_add_department_with_services.php", $(this).serialize(), function() {
-        location.reload();
-    }).fail(function(xhr) {
-        alert("Error: " + xhr.responseText);
-    });
+    if (confirm("Localhost says:\nAre you sure you want to add this department?")) {
+        $.post("ajax_add_department_with_services.php", $(this).serialize(), function() {
+            location.reload();
+        }).fail(function(xhr) {
+            alert("Error: " + xhr.responseText);
+        });
+    }
 });
 
-// Submit edit form
+// Submit edit form with confirmation
 $(".editForm").submit(function(e) {
     e.preventDefault();
-    const form = $(this);
-    const deptId = form.data("id");
-    const formData = form.serialize() + `&id=${deptId}`;
-    $.post("ajax_edit_department_with_services.php", formData, function() {
-        location.reload();
-    }).fail(function(xhr) {
-        alert("Error: " + xhr.responseText);
-    });
+    if (confirm("Are you sure you want to update this department?")) {
+        const form = $(this);
+        const deptId = form.data("id");
+        const formData = form.serialize() + `&id=${deptId}`;
+        $.post("ajax_edit_department_with_services.php", formData, function() {
+            location.reload();
+        }).fail(function(xhr) {
+            alert("Error: " + xhr.responseText);
+        });
+    }
 });
 
 // Live search filter

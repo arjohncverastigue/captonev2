@@ -131,14 +131,17 @@ $personnel = $stmt->fetchAll();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // ADD
-    $("#addForm").submit(function(e) {
-        e.preventDefault();
+    // ADD with confirmation
+$("#addForm").submit(function(e) {
+    e.preventDefault();
+    if (confirm("Are you sure you want to add this personnel?")) {
         $.post("ajax_create_personnel.php", $(this).serialize(), function(res) {
             location.reload();
         }).fail(function(xhr) {
             alert("Error: " + xhr.responseText);
         });
-    });
+    }
+});
 
     // FILL EDIT MODAL
     $(".editBtn").click(function() {
@@ -153,14 +156,17 @@ $personnel = $stmt->fetchAll();
     });
 
     // EDIT
-    $("#editForm").submit(function(e) {
-        e.preventDefault();
+    // EDIT with confirmation
+$("#editForm").submit(function(e) {
+    e.preventDefault();
+    if (confirm("Are you sure you want to update this personnel's details?")) {
         $.post("ajax_update_personnel.php", $(this).serialize(), function(res) {
             location.reload();
         }).fail(function(xhr) {
             alert("Error: " + xhr.responseText);
         });
-    });
+    }
+});
 
     // DELETE
     $(".deleteBtn").click(function() {
