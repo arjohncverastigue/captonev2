@@ -38,29 +38,46 @@ $residents = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="p-4">
-<div class="container">
-    <h3>Manage Resident Accounts</h3>
-    <table class="table table-bordered mt-4">
-    <thead>
-        <tr>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Date Created</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($residents as $resident): ?>
-            <tr>
-                <td><?= htmlspecialchars($resident['first_name'] . ' ' . $resident['middle_name'] . ' ' . $resident['last_name']) ?></td>
-                <td><?= htmlspecialchars($resident['email']) ?></td>
-                <td><?= date('F j, Y - g:i A', strtotime($resident['created_at'])) ?></td>
-                <td><button class="btn btn-danger btn-sm" onclick="deleteResident(<?= $resident['id'] ?>)">Delete</button></td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class='bx bx-group'></i> Manage Resident Accounts</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Date Created</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($residents)): ?>
+                            <?php foreach ($residents as $resident): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($resident['first_name'] . ' ' . $resident['middle_name'] . ' ' . $resident['last_name']) ?></td>
+                                    <td><?= htmlspecialchars($resident['email']) ?></td>
+                                    <td><?= date('F j, Y - g:i A', strtotime($resident['created_at'])) ?></td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteResident(<?= $resident['id'] ?>)">
+                                            <i class='bx bx-trash'></i> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="4" class="text-center text-muted">No resident accounts found.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 <script>
 function deleteResident(id) {

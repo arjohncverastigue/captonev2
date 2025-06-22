@@ -125,6 +125,55 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
             width:120px; height:auto;
             max-width:80%; 
         }
+        .l-navbar .nav_link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 5px 0;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .l-navbar .nav_link i {
+            margin-right: 12px;
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .l-navbar .nav_link:hover {
+            background-color: #27548A;
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .l-navbar .nav_link:hover i {
+            transform: rotate(10deg) scale(1.2);
+        }
+
+        .l-navbar h4 {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .header_img {
+            display: block;
+            margin: 0 auto 10px;
+            max-width: 80px;
+            border-radius: 50%;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .header_img:hover {
+            transform: scale(1.2);
+        }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -149,6 +198,21 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
         function loadContent(page) {
             $("#content-area").load(page);
         }
+
+        function toggleProfileMenu() {
+            const menu = document.getElementById("profileMenu");
+            menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+        }
+
+        // Optional: Close when clicking outside
+        window.addEventListener('click', function(e) {
+            const trigger = document.querySelector('[onclick="toggleProfileMenu()"]');
+            const menu = document.getElementById("profileMenu");
+            if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+            menu.style.display = "none";
+            }
+        });
+        
     </script>
 </head>
 <body id="body-pd">
@@ -157,8 +221,27 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
 
         <!-- Avatar icon for profile -->
-        <div onclick="loadContent('profile.php')" style="cursor: pointer;">
-            <img src="images/default_avatar.png" alt="Avatar" class="rounded-circle" width="35" height="35" title="My Profile">
+        <!-- Avatar icon for profile -->
+        <div class="position-relative d-inline-block" style="z-index: 1050;">
+        <!-- Profile Icon Trigger -->
+        <div onclick="toggleProfileMenu()" title="My Profile" style="cursor: pointer;">
+            <i class='bx bx-user-circle text-primary' style="font-size: 40px;"></i>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div id="profileMenu" class="profile-dropdown bg-white shadow border rounded position-absolute py-2"
+            style="display: none; min-width: 200px; top: 100%; right: 0; z-index: 2000;">
+            <a href="#" onclick="loadContent('view_profile.php')" class="dropdown-item px-3 py-2 d-flex align-items-center text-dark">
+            <i class='bx bx-id-card mr-2'></i> View Profile
+            </a>
+            <a href="#" onclick="loadContent('profile.php')" class="dropdown-item px-3 py-2 d-flex align-items-center text-dark">
+            <i class='bx bx-edit-alt mr-2'></i> Edit Profile
+            </a>
+            <div class="dropdown-divider my-1"></div>
+            <a href="logout.php" class="dropdown-item px-3 py-2 d-flex align-items-center text-danger">
+            <i class='bx bx-log-out-circle mr-2'></i> Logout
+            </a>
+        </div>
         </div>
     </header>
 

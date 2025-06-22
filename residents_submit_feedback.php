@@ -96,26 +96,92 @@ $completedAppointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="p-4">
+<<<<<<< Updated upstream
 <div class="container">
     <h3>Submit Feedback</h3>
     <button type="button" class="btn btn-secondary mb-3" onclick="$('#content-area').load('residents_select_form.php')">← Back to Form Selector</button>
+=======
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="text-primary mb-4"><i class="fas fa-comment-dots mr-2"></i>Submit Your Feedback</h3>
+>>>>>>> Stashed changes
 
-    <div id="alert-container"></div>
+            <button type="button" class="btn btn-outline-secondary mb-4" onclick="$('#content-area').load('residents_select_form.php')">
+                ← Back to Form Selector
+            </button>
 
-    <?php if (!empty($completedAppointments)): ?>
-    <form id="feedback-form">
-        <div class="form-group">
-            <label for="appointment_id">Select Completed Appointment:</label>
-            <select class="form-control" id="appointment_id" name="appointment_id" required>
-                <option value="">-- Select Appointment --</option>
-                <?php foreach ($completedAppointments as $appointment): ?>
-                    <option value="<?= $appointment['appointment_id']; ?>">
-                        <?= $appointment['department_name'] . " - " . date('F d, Y h:i A', strtotime($appointment['scheduled_for'])); ?>
-                    </option>
+            <div id="alert-container"></div>
+
+            <?php if (!empty($completedAppointments)): ?>
+            <form id="feedback-form">
+                <div class="form-group">
+                    <label for="appointment_id"><strong>Select Completed Appointment:</strong></label>
+                    <select class="form-control border-primary" id="appointment_id" name="appointment_id" required>
+                        <option value="">-- Select Appointment --</option>
+                        <?php foreach ($completedAppointments as $appointment): ?>
+                            <option value="<?= $appointment['appointment_id']; ?>">
+                                <?= htmlspecialchars($appointment['department_name']) . " - " . date('F d, Y h:i A', strtotime($appointment['scheduled_for'])); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="alert alert-info">Please answer the following questions:</div>
+
+                <!-- Structured Sections -->
+                <h5 class="text-muted mt-4 mb-2">A. About the Office</h5>
+                <?php
+                $section_breaks = [
+                    'q1_office_easy_locate' => 'A. About the Office',
+                    'q1_staff_available' => 'B. About the Staff',
+                    'q1_req_informed' => 'C. About the Requirements',
+                    'q1_officer_present' => 'D. About the Officers',
+                    'q1_info_available' => 'E. About the Documents/Information',
+                ];
+
+                $questions = [
+                    'q1_office_easy_locate' => '1. Was it easy to locate the office?',
+                    'q2_office_clean' => '2. Was it clean and orderly?',
+                    'q3_office_long_line' => '3. Is there a long line of clients?',
+                    'q4_office_signs' => '4. Did you find proper directional signs/instructions?',
+                    'q1_staff_available' => '1. Were the designated employees available?',
+                    'q2_staff_respectful' => '2. Were they respectful?',
+                    'q3_staff_comfortable' => '3. Did they make you feel comfortable?',
+                    'q4_staff_wait_long' => '4. Did they make you wait long?',
+                    'q5_staff_knowledgeable' => '5. Were they knowledgeable?',
+                    'q1_req_informed' => '1. Were you properly informed what you needed to present?',
+                    'q2_req_many' => '2. Were there many requirements?',
+                    'q3_req_how_to_get' => '3. Were you informed how to get the requirements?',
+                    'q4_req_fee' => '4. Were you made aware of how much you will have to pay?',
+                    'q1_officer_present' => '1. Were the authorized officials present?',
+                    'q2_officer_slow' => '2. Did it take them long to sign the documents?',
+                    'q1_info_available' => '1. Was the document you needed available?',
+                    'q2_info_complete' => '2. Was the data complete?',
+                    'q3_info_clear' => '3. Were the instructions clear and short?'
+                ];
+
+                $current_section = '';
+                foreach ($questions as $name => $label):
+                    if (isset($section_breaks[$name]) && $section_breaks[$name] !== $current_section):
+                        $current_section = $section_breaks[$name];
+                        echo "<h5 class='text-muted mt-4 mb-2'>{$current_section}</h5>";
+                    endif;
+                ?>
+                    <div class="form-group">
+                        <label><?= $label ?></label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="<?= $name ?>" value="1" required>
+                            <label class="form-check-label">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="<?= $name ?>" value="0">
+                            <label class="form-check-label">No</label>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </select>
-        </div>
 
+<<<<<<< Updated upstream
         <div class="alert alert-info">Please answer the following:</div>
 
         <!-- Section: THE OFFICE -->
@@ -214,54 +280,66 @@ $completedAppointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <label><?= $label ?></label><br>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="<?= $name ?>" value="1" required> Yes
+=======
+                <!-- Text Feedback -->
+                <div class="form-group mt-4">
+                    <label for="comments"><strong>Other Comments and Suggestions:</strong></label>
+                    <textarea class="form-control" name="comments" id="comments" rows="3" placeholder="Write any additional feedback here..."></textarea>
+>>>>>>> Stashed changes
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="<?= $name ?>" value="0"> No
+
+                <div class="form-group">
+                    <label for="attending_employee_name"><strong>Name of Attending Employee (Optional):</strong></label>
+                    <input type="text" class="form-control" name="attending_employee_name" id="attending_employee_name">
                 </div>
-            </div>
-        <?php endforeach; ?>
 
-        <div class="form-group">
-            <label for="comments">Other Comments and Suggestions:</label>
-            <textarea class="form-control" name="comments" id="comments" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="attending_employee_name">Name of Attending Employee:</label>
-            <input type="text" class="form-control" name="attending_employee_name" id="attending_employee_name">
-        </div>
-        <div class="form-group">
-            <label for="feedback">Additional Feedback:</label>
-            <textarea class="form-control" name="feedback" id="feedback" rows="3" required></textarea>
-        </div>
+                <div class="form-group">
+                    <label for="feedback"><strong>Additional Feedback:</strong></label>
+                    <textarea class="form-control" name="feedback" id="feedback" rows="3" required></textarea>
+                </div>
 
-        <button type="submit" class="btn btn-primary">Submit Feedback</button>
-    </form>
-    <?php else: ?>
-        <div class="alert alert-warning">You have no completed appointments to provide feedback for.</div>
-    <?php endif; ?>
+                <button type="submit" class="btn btn-primary btn-lg mt-2">Submit Feedback</button>
+            </form>
+
+            <?php else: ?>
+                <div class="alert alert-warning">You have no completed appointments to provide feedback for.</div>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
+
 
 <script>
     $('#feedback-form').on('submit', function (e) {
         e.preventDefault();
+
+        if (!$('#appointment_id').val()) {
+            alert('Please select an appointment.');
+            return;
+        }
+
+        $('button[type="submit"]').prop('disabled', true);
         $.ajax({
             url: 'residents_submit_feedback.php',
             type: 'POST',
             data: $('#feedback-form').serialize() + '&ajax=true',
             success: function (response) {
+                $('button[type="submit"]').prop('disabled', false);
                 if (response.success) {
-                    alert(response.message);
+                    $('#alert-container').html('<div class="alert alert-success">' + response.message + '</div>');
                     $('#feedback-form')[0].reset();
-                    location.reload();
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    alert(response.message);
+                    $('#alert-container').html('<div class="alert alert-danger">' + response.message + '</div>');
                 }
             },
             error: function () {
-                alert("An unexpected error occurred.");
+                $('button[type="submit"]').prop('disabled', false);
+                $('#alert-container').html('<div class="alert alert-danger">An unexpected error occurred.</div>');
             }
         });
     });
 </script>
+
 </body>
 </html>

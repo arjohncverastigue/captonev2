@@ -130,7 +130,10 @@ $pmTotal = (int)$peakData['pm_total'];
 </head>
 <body class="bg-light">
 <div class="container my-4">
-  <h2 class="mb-4 text-center text-primary">LGU Personnel Dashboard</h2>
+  <h2 class="mb-4 text-center text-primary d-flex align-items-center justify-content-center" style="gap: 10px; font-weight: 600; font-size: 2rem;">
+    <i class='bx bxs-dashboard bx-tada' style="font-size: 2.5rem;"></i>
+    LGU Personnel Dashboard
+  </h2>
 
   <!-- Cards -->
   <div class="row text-center">

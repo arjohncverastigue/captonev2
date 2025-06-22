@@ -82,6 +82,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 $monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 ?>
+<body>
+  <h2 class="mb-4 text-center text-primary d-flex align-items-center justify-content-center" style="gap: 10px; font-weight: 600; font-size: 2rem;">
+    <i class='bx bxs-dashboard bx-tada' style="font-size: 2.5rem;"></i>
+    Admin Dashboard
+  </h2>
 
 <!-- Analytics Cards -->
 <div class="row">
@@ -103,33 +108,6 @@ $monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 </div>
 </div>
 
-<!-- <div class="col-md-4 mb-3">
-<div class="card shadow-sm border-left-primary p-3">
-<div class="d-flex justify-content-between align-items-center">
-    <div>
-    <h6>Completed Appointments</h6>
-    <h3 class="text-primary">
-        <h3 class="text-success"><?php echo number_format($completedCount); ?></h3>
-    </h3>
-    </div>
-    <i class='bx bx-calendar-check bx-lg text-primary'></i>
-</div>
-</div>
-</div> -->
-
-<!-- <div class="col-md-4 mb-3">
-<div class="card shadow-sm border-left-primary p-3">
-<div class="d-flex justify-content-between align-items-center">
-    <div>
-    <h6>Pending Appointments</h6>
-    <h3 class="text-primary">
-        <h3 class="text-warning"><?php echo number_format($pendingCount); ?></h3>
-    </h3>
-    </div>
-    <i class='bx bx-calendar-check bx-lg text-primary'></i>
-</div>
-</div>
-</div> -->
 
 <!-- Registered Residents -->
 <div class="col-md-4 mb-3">
@@ -187,7 +165,7 @@ $monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 </div>
 
 </div>
-
+</body>
 <!-- Chart.js Script -->
 <canvas id="monthChart" height="100"></canvas>
 <canvas id="deptChart" height="100"></canvas>

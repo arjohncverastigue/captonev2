@@ -33,50 +33,67 @@ $recentAppointments = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="p-4">
-<div class="container">
-    <h3>View Appointments</h3>
-
-    <div class="form-group mt-4">
-        <label for="departmentFilter">Filter by Department:</label>
-        <select id="departmentFilter" class="form-control" onchange="filterAppointments()">
-            <option value="">-- All Departments --</option>
-            <?php foreach ($departments as $dept): ?>
-                <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['name']) ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-
-    <div id="appointmentsTable">
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>Resident Name</th>
-                    <th>Department</th>
-                    <th>Reason</th>
-                    <th>Scheduled For</th>
-                    <th>Status</th>
-                    <th>Requested At</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($recentAppointments)): ?>
-                    <?php foreach ($recentAppointments as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
-                            <td><?= htmlspecialchars($row['department_name']) ?></td>
-                            <td><?= htmlspecialchars($row['reason'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($row['scheduled_for'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($row['status']) ?></td>
-                            <td><?= htmlspecialchars($row['requested_at']) ?></td>
-                        </tr>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class='bx bx-calendar-event'></i> View Appointments</h5>
+            <div class="form-inline">
+                <label for="departmentFilter" class="me-2">Filter by Department:</label>
+                <select id="departmentFilter" class="form-select form-select-sm" style="width: 200px;" onchange="filterAppointments()">
+                    <option value="">-- All Departments --</option>
+                    <?php foreach ($departments as $dept): ?>
+                        <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['name']) ?></option>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="6" class="text-center">No recent appointments found.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </select>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th>Resident Name</th>
+                            <th>Department</th>
+                            <th>Reason</th>
+                            <th>Scheduled For</th>
+                            <th>Status</th>
+                            <th>Requested At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($recentAppointments)): ?>
+                            <?php foreach ($recentAppointments as $row): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
+                                    <td><?= htmlspecialchars($row['department_name']) ?></td>
+                                    <td><?= htmlspecialchars($row['reason'] ?? 'N/A') ?></td>
+                                    <td><?= date('F j, Y • g:i A', strtotime($row['scheduled_for'] ?? '')) ?></td>
+                                    <td class="text-center">
+                                        <?php
+                                            $status = htmlspecialchars($row['status']);
+                                            $badgeClass = match($status) {
+                                                'Pending' => 'warning',
+                                                'Approved' => 'primary',
+                                                'Declined' => 'danger',
+                                                'Completed' => 'success',
+                                                default => 'secondary'
+                                            };
+                                        ?>
+                                        <span class="badge bg-<?= $badgeClass ?>"><?= $status ?></span>
+                                    </td>
+                                    <td><?= date('M d, Y g:i A', strtotime($row['requested_at'])) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="6" class="text-center text-muted">No recent appointments found.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <script>
     function filterAppointments() {

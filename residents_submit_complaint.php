@@ -73,67 +73,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
 </head>
 <body class="p-4">
 <!-- HTML -->
-<div class="container">
-    <h3>Complaint Form</h3>
-    <button type="button" class="btn btn-secondary mb-3" onclick="$('#content-area').load('residents_select_form.php')">
-        ← Back to Form Selector
-    </button>
-
-    <form id="complaint-form">
-        <div class="form-group">
-            <label for="appointment_id">Select Completed Appointment:</label>
-            <select name="appointment_id" class="form-control" required>
-                <option value="">-- Select Appointment --</option>
-                <?php foreach ($appointments as $appt): ?>
-                    <option value="<?= $appt['appointment_id'] ?>">
-                        <?= $appt['department_name'] . ' - ' . date('F d, Y h:i A', strtotime($appt['scheduled_for'])) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-exclamation-circle mr-2"></i> Complaint Form</h4>
+            <button type="button" class="btn btn-light btn-sm" onclick="$('#content-area').load('residents_select_form.php')">
+                ← Back to Form Selector
+            </button>
         </div>
 
-        <div class="form-group">
-            <label for="employee_name">Name of Employee:</label>
-            <input type="text" name="employee_name" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="office">Office:</label>
-            <input type="text" name="office" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label>Nature of Complaint:</label><br>
-            <?php
-            $complaintTypes = [
-                "Discourteous Employee",
-                "Employee was not familiar with the data requested or needed",
-                "No employee was available to accommodate the request",
-                "Employee was biased in rendering services",
-                "Unreasonable waiting time",
-                "Office was disorganized",
-                "Document given was incomplete or incorrect"
-            ];
-            foreach ($complaintTypes as $index => $label): ?>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="complaint_type[]" value="<?= $label ?>" id="c<?= $index ?>">
-                    <label class="form-check-label" for="c<?= $index ?>"><?= $label ?></label>
+        <div class="card-body">
+            <form id="complaint-form">
+                <!-- Appointment Selection -->
+                <div class="form-group">
+                    <label for="appointment_id" class="font-weight-bold">Select Completed Appointment:</label>
+                    <select name="appointment_id" class="form-control custom-select" required>
+                        <option value="">-- Select Appointment --</option>
+                        <?php foreach ($appointments as $appt): ?>
+                            <option value="<?= $appt['appointment_id'] ?>">
+                                <?= $appt['department_name'] . ' - ' . date('F d, Y h:i A', strtotime($appt['scheduled_for'])) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
-            <?php endforeach; ?>
-            <div class="form-group mt-2">
-                <label>Others:</label>
-                <input type="text" class="form-control" name="complaint_type[]">
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label for="additional_details">Additional Details:</label>
-            <textarea class="form-control" name="additional_details" rows="3"></textarea>
-        </div>
+                <!-- Personal Information -->
+                <div class="form-group">
+                    <label for="employee_name" class="font-weight-bold">Name of Employee:</label>
+                    <input type="text" name="employee_name" class="form-control" placeholder="e.g., John Doe" required>
+                </div>
 
-        <button type="submit" class="btn btn-danger">Submit Complaint</button>
-    </form>
+                <div class="form-group">
+                    <label for="office" class="font-weight-bold">Office:</label>
+                    <input type="text" name="office" class="form-control" placeholder="e.g., Civil Registry">
+                </div>
+
+                <!-- Complaint Type -->
+                <div class="form-group">
+                    <label class="font-weight-bold">Nature of Complaint:</label>
+                    <div class="border rounded p-3 bg-light">
+                        <?php
+                        $complaintTypes = [
+                            "Discourteous Employee",
+                            "Employee was not familiar with the data requested or needed",
+                            "No employee was available to accommodate the request",
+                            "Employee was biased in rendering services",
+                            "Unreasonable waiting time",
+                            "Office was disorganized",
+                            "Document given was incomplete or incorrect"
+                        ];
+                        foreach ($complaintTypes as $index => $label): ?>
+                            <div class="form-check mb-1">
+                                <input class="form-check-input" type="checkbox" name="complaint_type[]" value="<?= $label ?>" id="c<?= $index ?>">
+                                <label class="form-check-label" for="c<?= $index ?>"><?= $label ?></label>
+                            </div>
+                        <?php endforeach; ?>
+
+                        <div class="form-group mt-3 mb-0">
+                            <label class="mb-1">Other Complaint:</label>
+                            <input type="text" class="form-control" name="complaint_type[]" placeholder="Specify other concern">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Details -->
+                <div class="form-group">
+                    <label for="additional_details" class="font-weight-bold">Additional Details:</label>
+                    <textarea class="form-control" name="additional_details" rows="4" placeholder="Please describe the issue in detail..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-danger btn-block py-2">
+                    <i class="fas fa-paper-plane mr-1"></i> Submit Complaint
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
+
 
 <!-- AJAX -->
 <script>

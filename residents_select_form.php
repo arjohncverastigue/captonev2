@@ -9,35 +9,62 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Select Form</title>
+    <title>Select Feedback Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body class="p-4"></body>
-<div class="container">
-    <h4>Select Feedback Form</h4>
-    <div class="form-group">
-        <label for="form_type">Please choose a form:</label>
-        <select id="form_type" class="form-control">
-            <option value="">-- Select --</option>
-            <option value="residents_submit_feedback.php">Client Feedback Form</option>
-            <option value="residents_submit_commendation.php">Commendation Form</option>
-            <option value="residents_submit_complaint.php">Complaint Form</option>
-        </select>
-    </div>
-    <button class="btn btn-primary" id="proceed_btn">Proceed</button>
-</div>
-
-<script>
-    document.getElementById('proceed_btn').addEventListener('click', function () {
-        const selectedForm = document.getElementById('form_type').value;
-        if (selectedForm) {
-            // This assumes you're still inside residents_dashboard.php
-            $("#content-area").load(selectedForm);
-        } else {
-            alert('Please select a form.');
+    <style>
+        body {
+            background-color: #f8f9fa;
         }
-    });
-</script>
+        .card-option {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        .card-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        }
+        .card-option h5 {
+            margin-bottom: 0.5rem;
+        }
+        .top-wrapper {
+            padding-top: 60px; /* Adjust this value as needed */
+        }
+<a href="#" class="nav_link" onclick="loadContent('residents_view_departments.php')">
+    </style>
+</head>
+<body>
+    <div class="container top-wrapper">
+        <div class="w-100" style="max-width: 600px; margin: 0 auto;">
+            <div class="text-center mb-4">
+                <h3 class="text-primary font-weight-bold">Select Feedback Form</h3>
+                <p class="text-muted">Please choose a form below:</p>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="card card-option p-3" onclick="loadContent('residents_submit_feedback.php')">
+                        <h5 class="text-primary"><i class="fas fa-comment-alt mr-2"></i>Client Feedback Form</h5>
+                        <p class="text-muted mb-0">Let us know your thoughts and suggestions about our services.</p>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <div class="card card-option p-3" onclick="loadContent('residents_submit_commendation.php')">
+                        <h5 class="text-success"><i class="fas fa-thumbs-up mr-2"></i>Commendation Form</h5>
+                        <p class="text-muted mb-0">Recognize personnel or services that impressed you.</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card card-option p-3" onclick="loadContent('residents_submit_complaint.php')">
+                        <h5 class="text-danger"><i class="fas fa-exclamation-circle mr-2"></i>Complaint Form</h5>
+                        <p class="text-muted mb-0">Report issues, problems, or concerns for improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

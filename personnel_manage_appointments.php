@@ -34,10 +34,14 @@ $appointmentData = $appointments->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="p-4">
 <div class="container">
-    <h3>Manage Appointments (Your Department Only)</h3>
+    <div class="bg-light border-left border-primary pl-3 py-2 mb-4 shadow-sm">
+    <h2 class="text-primary font-weight-bold mb-0">
+        <i class="fas fa-calendar-check mr-2"></i>Manage Your Appointments
+    </h2>
+</div>
 
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchInput" placeholder="Search appointments...">
+    <div class="input-group mb-4">
+        <input type="text" class="form-control shadow-sm" id="searchInput" placeholder="Search appointments...">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" id="clearFilters">Clear Filters</button>
         </div>
@@ -48,14 +52,14 @@ $appointmentData = $appointments->fetchAll(PDO::FETCH_ASSOC);
     <div class="row" id="appointments-container">
         <?php if (!empty($appointmentData)): ?>
             <?php foreach ($appointmentData as $app): ?>
-                <div class="col-md-4 mb-4 appointment-card">
-                    <div class="card" data-toggle="modal" data-target="#viewModal<?= $app['id'] ?>">
+                <div class="col-md-6 col-lg-4 mb-4 appointment-card">
+                    <div class="card shadow-sm h-100 border-left-primary" data-toggle="modal" data-target="#viewModal<?= $app['id'] ?>">
                         <div class="card-body">
-                            <h5 class="card-title">Transaction #<?= $app['id'] ?></h5>
-                            <p><strong>Resident:</strong> <?= htmlspecialchars($app['first_name'] . ' ' . $app['last_name']) ?></p>
-                            <p><strong>Service:</strong> <?= htmlspecialchars($app['service_name'] ?? 'N/A') ?></p>
-                            <p><strong>Reason:</strong> <?= htmlspecialchars($app['reason']) ?></p>
-                            <p><strong>Scheduled:</strong> <?= $app['scheduled_for'] ?? 'N/A' ?></p>
+                            <h5 class="card-title text-primary mb-2">Transaction #<?= $app['id'] ?></h5>
+                            <p class="mb-1"><strong>Resident:</strong> <?= htmlspecialchars($app['first_name'] . ' ' . $app['last_name']) ?></p>
+                            <p class="mb-1"><strong>Service:</strong> <?= htmlspecialchars($app['service_name'] ?? 'N/A') ?></p>
+                            <p class="mb-1"><strong>Reason:</strong> <?= htmlspecialchars($app['reason']) ?></p>
+                            <p class="mb-0"><strong>Scheduled:</strong> <?= $app['scheduled_for'] ?? 'N/A' ?></p>
                         </div>
                     </div>
                 </div>
@@ -63,27 +67,35 @@ $appointmentData = $appointments->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Appointment Detail Modal -->
                 <div class="modal fade" id="viewModal<?= $app['id'] ?>" tabindex="-1">
                     <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
+                        <div class="modal-content shadow">
+                            <div class="modal-header bg-primary text-white">
                                 <h5 class="modal-title">Appointment Details - Transaction #<?= $app['id'] ?></h5>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <p><strong>Full Name:</strong> <?= htmlspecialchars($app['first_name'] . ' ' . $app['middle_name'] . ' ' . $app['last_name']) ?></p>
-                                <p><strong>Email:</strong> <?= htmlspecialchars($app['email']) ?></p>
-                                <p><strong>Address:</strong> <?= htmlspecialchars($app['address']) ?></p>
-                                <p><strong>Birthday:</strong> <?= htmlspecialchars($app['birthday']) ?></p>
-                                <p><strong>Age:</strong> <?= htmlspecialchars($app['age']) ?></p>
-                                <p><strong>Sex:</strong> <?= htmlspecialchars($app['sex']) ?></p>
-                                <p><strong>Civil Status:</strong> <?= htmlspecialchars($app['civil_status']) ?></p>
-                                <p><strong>Service:</strong> <?= htmlspecialchars($app['service_name'] ?? 'N/A') ?></p>
-                                <p><strong>Reason:</strong> <?= htmlspecialchars($app['reason']) ?></p>
-                                <p><strong>Valid ID:</strong><br>
-                                    <img src="<?= (strpos($app['valid_id_path'], 'uploads/') === 0) ? htmlspecialchars($app['valid_id_path']) : 'uploads/' . htmlspecialchars($app['valid_id_path']) ?>" alt="Valid ID" class="img-fluid clickable-id" style="max-width: 300px;" data-toggle="modal" data-target="#fullImageModal" data-img-src="<?= (strpos($app['valid_id_path'], 'uploads/') === 0) ? htmlspecialchars($app['valid_id_path']) : 'uploads/' . htmlspecialchars($app['valid_id_path']) ?>">
-                                </p>
-                                <div class="mt-3">
-                                    <button class="btn btn-success complete-btn" data-id="<?= $app['id'] ?>" data-dismiss="modal">Complete</button>
-                                    <button class="btn btn-danger delete-btn" data-id="<?= $app['id'] ?>" data-dismiss="modal">Delete</button>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Full Name:</strong> <?= htmlspecialchars($app['first_name'] . ' ' . $app['middle_name'] . ' ' . $app['last_name']) ?></p>
+                                        <p><strong>Email:</strong> <?= htmlspecialchars($app['email']) ?></p>
+                                        <p><strong>Address:</strong> <?= htmlspecialchars($app['address']) ?></p>
+                                        <p><strong>Birthday:</strong> <?= htmlspecialchars($app['birthday']) ?></p>
+                                        <p><strong>Age:</strong> <?= htmlspecialchars($app['age']) ?></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Sex:</strong> <?= htmlspecialchars($app['sex']) ?></p>
+                                        <p><strong>Civil Status:</strong> <?= htmlspecialchars($app['civil_status']) ?></p>
+                                        <p><strong>Service:</strong> <?= htmlspecialchars($app['service_name'] ?? 'N/A') ?></p>
+                                        <p><strong>Reason:</strong> <?= htmlspecialchars($app['reason']) ?></p>
+                                        <p><strong>Valid ID:</strong></p>
+                                        <img src="<?= (strpos($app['valid_id_path'], 'uploads/') === 0) ? htmlspecialchars($app['valid_id_path']) : 'uploads/' . htmlspecialchars($app['valid_id_path']) ?>" 
+                                             alt="Valid ID" class="img-thumbnail clickable-id" style="max-width: 100%; cursor: pointer;" 
+                                             data-toggle="modal" data-target="#fullImageModal" 
+                                             data-img-src="<?= (strpos($app['valid_id_path'], 'uploads/') === 0) ? htmlspecialchars($app['valid_id_path']) : 'uploads/' . htmlspecialchars($app['valid_id_path']) ?>">
+                                    </div>
+                                </div>
+                                <div class="text-right mt-4">
+                                    <button class="btn btn-success complete-btn" data-id="<?= $app['id'] ?>" data-dismiss="modal">Mark as Completed</button>
+                                    <button class="btn btn-danger delete-btn" data-id="<?= $app['id'] ?>" data-dismiss="modal">Delete Appointment</button>
                                 </div>
                             </div>
                         </div>
@@ -97,15 +109,16 @@ $appointmentData = $appointments->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <!-- Full Image Modal -->
-<div class="modal fade modal-full-img" id="fullImageModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="fullImageModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body text-center p-2">
-                <img src="" alt="Full Image" id="fullImage" class="img-fluid">
+        <div class="modal-content shadow">
+            <div class="modal-body text-center p-3">
+                <img src="" alt="Full ID Image" id="fullImage" class="img-fluid rounded">
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
 $(document).ready(function () {

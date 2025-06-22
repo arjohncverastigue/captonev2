@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Register</button>
-        <a href="index.php" class="login-link">Already have an account? Login Here</a>
+        <a href="login.php" class="login-link">Already have an account? Login Here</a>
       </form>
     </div>
   </div>

@@ -1,3 +1,20 @@
+<?php
+session_start();
+include 'conn.php';
+
+if (!isset($_SESSION['user_id'])) {
+    echo "<script>alert('Please log in first.'); window.location.href='login.php';</script>";
+    exit();
+}
+
+$query = "SELECT d.*, GROUP_CONCAT(s.service_name SEPARATOR ', ') AS services
+          FROM departments d
+          LEFT JOIN department_services s ON d.id = s.department_id
+          GROUP BY d.id ORDER BY d.name ASC";
+$stmt = $pdo->query($query);
+$departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,16 +71,38 @@
             background-color: #17a2b8; /* Keep info color */
             color: #fff;
         }
+        .hover-shadow:hover {
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+        }
 
-        
+        .badge-info {
+            background-color: #0dcaf0;
+        }
+        .hover-shadow:hover {
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+        }
+
+        .badge-info {
+            background-color: #0dcaf0;
+        }
+        .modal-custom-sm {
+            max-width: 500px; /* You can adjust this width as needed */
+        }
+        .badge-lg {
+            font-size: 0.95rem;  /* Slightly larger text */
+            padding: 0.5em 0.75em;  /* More space inside */
+        }
+
 
     </style>
 </head>
 <body class="p-4">
-<?php
-session_start();
-include 'conn.php';
+<div class="container mt-4">
+    <h3 class="mb-4 text-primary font-weight-bold"><i class="fas fa-building mr-2"></i>Departments</h3>
 
+<<<<<<< Updated upstream
 if (!isset($_SESSION['user_id'])) {
     echo "<script>alert('Please log in first.'); window.location.href='login.php';</script>";
     exit();
@@ -88,11 +127,16 @@ foreach ($requirements as $req) {
 <div class="container">
     <h3 class="mb-4">Departments</h3>
     <div class="input-group mb-4">
+=======
+    <!-- Search bar -->
+    <div class="input-group mb-4 shadow-sm">
+>>>>>>> Stashed changes
         <input type="text" class="form-control" id="searchInput" placeholder="Search department or service...">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" id="clearSearch">Clear Filter</button>
+            <button class="btn btn-outline-danger" id="clearSearch"><i class="fas fa-times-circle"></i> Clear</button>
         </div>
     </div>
+<<<<<<< Updated upstream
     <div class="row" id="departmentList">
         <?php foreach ($departments as $d): 
             $serviceIds = explode(',', $d['service_ids'] ?? '');
@@ -139,6 +183,20 @@ foreach ($requirements as $req) {
                                     <div class="text-muted ml-2">No requirements listed.</div>
                                 <?php endif; ?>
                             </li>
+=======
+
+    <!-- Department Cards -->
+    <div class="row" id="departmentList">
+        <?php foreach ($departments as $d): ?>
+            <div class="col-md-4 mb-4 department-card">
+                <div class="card h-100 shadow-sm border-0 hover-shadow" data-toggle="modal" data-target="#deptModal<?= $d['id'] ?>">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark font-weight-bold"><?= htmlspecialchars($d['name']) ?></h5>
+                        <p class="card-text text-muted"><?= htmlspecialchars($d['description']) ?></p>
+                        <div>
+                            <?php foreach (explode(',', $d['services']) as $svc): ?>
+                                <span class="badge badge-pill badge-primary mr-1 mb-1"><?= htmlspecialchars(trim($svc)) ?></span>
+>>>>>>> Stashed changes
                             <?php endforeach; ?>
                         </ul>
                         <div class="text-center">
@@ -147,17 +205,53 @@ foreach ($requirements as $req) {
                     </div>
                 </div>
             </div>
+<<<<<<< Updated upstream
         </div>
+=======
+
+            <!-- Department Modal -->
+            <div class="modal fade" id="deptModal<?= $d['id'] ?>" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-custom-sm">
+                    <div class="modal-content shadow-lg border-0 rounded-lg">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title"><?= htmlspecialchars($d['name']) ?></h5>
+                            <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Description:</strong><br><?= htmlspecialchars($d['description']) ?></p>
+
+                            <p class="mt-3"><strong>Services Offered:</strong></p>
+                            <div class="mb-3">
+                                <?php foreach (explode(',', $d['services']) as $svc): ?>
+                                    <span class="badge badge-info badge-pill mr-1 mb-1 badge-lg"><?= htmlspecialchars(trim($svc)) ?></span>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button class="btn btn-outline-primary" 
+                                    data-toggle="modal" 
+                                    data-target="#appointmentModal" 
+                                    data-dismiss="modal" 
+                                    onclick="openBooking(<?= $d['id'] ?>)">
+                                    <i class="fas fa-calendar-plus mr-1"></i> Book Appointment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+>>>>>>> Stashed changes
         <?php endforeach; ?>
     </div>
 </div>
 
+<!-- Book Appointment Modal -->
 <div class="modal fade" id="appointmentModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="appointment-form" class="modal-content" enctype="multipart/form-data">
-            <div class="modal-header">
-                <h5 class="modal-title">Book Appointment</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-dialog modal-lg">
+        <form id="appointment-form" class="modal-content shadow-sm border-0" enctype="multipart/form-data">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-calendar-check mr-2"></i>Book Appointment</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="department_id" id="department_id">
@@ -170,32 +264,36 @@ foreach ($requirements as $req) {
 
                 <div class="form-group">
                     <label for="valid_id">Upload Valid ID</label>
-                    <input type="file" class="form-control" name="valid_id" id="valid_id" accept="image/*" required>
+                    <input type="file" class="form-control-file" name="valid_id" id="valid_id" accept="image/*" required>
                 </div>
 
                 <div class="form-group">
                     <label>Select Available Date</label>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <button type="button" class="btn btn-outline-secondary btn-sm" id="prevMonth">Previous</button>
-                        <span id="calendar-header" class="font-weight-bold"></span>
+                        <strong id="calendar-header" class="mx-2"></strong>
                         <button type="button" class="btn btn-outline-secondary btn-sm" id="nextMonth">Next</button>
                     </div>
                     <div id="calendar"></div>
-                    <div id="slotSelector" class="mt-2"></div>
+                    <div id="slotSelector" class="mt-3"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="reason">Reason for Appointment</label>
-                    <textarea class="form-control" name="reason" id="reason" required></textarea>
+                    <textarea class="form-control" name="reason" id="reason" rows="3" required></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-success btn-block">Confirm Appointment</button>
+                <button type="submit" class="btn btn-success btn-block">
+                    <i class="fas fa-check-circle mr-1"></i>Confirm Appointment
+                </button>
             </div>
         </form>
     </div>
 </div>
 
+<!-- Transaction Number Modal -->
 <div class="modal fade" id="transactionModal" tabindex="-1">
+<<<<<<< Updated upstream
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -207,9 +305,23 @@ foreach ($requirements as $req) {
         <h4 id="transactionNumber" class="text-primary font-weight-bold"></h4>
         <p class="mt-3">Please remember your transaction number and bring the required documents for the selected service to the assigned personnel when requested.</p>
       </div>
+=======
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Transaction Number</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Your appointment has been booked!</p>
+                <h4 id="transactionNumber" class="text-success font-weight-bold"></h4>
+                <p class="mt-3">Please keep a copy of this number. It will be required during verification.</p>
+            </div>
+        </div>
+>>>>>>> Stashed changes
     </div>
-  </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>

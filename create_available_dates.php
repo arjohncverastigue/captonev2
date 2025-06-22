@@ -69,43 +69,114 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $existingDates[] = $date;
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
+  <style>
+  #calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .calendar-day {
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .calendar-day:hover:not(.disabled):not(.selected) {
+    background-color: #e2f0d9;
+  }
+
+  .calendar-day.disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    color: #999;
+  }
+
+  .calendar-day.selected {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+  }
+
+  .calendar-header {
+    font-weight: bold;
+    background-color: #e9ecef;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 5px;
+  }
+
+  .month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .month-nav button {
+    min-width: 100px;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    margin-top: 5px;
+    display: block;
+  }
+</style>
 <head>
   <meta charset="UTF-8">
   <title>Create Available Dates</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <style>
-    #calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
-    .calendar-day { padding: 15px; border: 1px solid #ccc; text-align: center; background-color: #f8f9fa; cursor: pointer; }
-    .calendar-day.disabled { background-color: #e9ecef; cursor: not-allowed; color: #999; }
-    .calendar-day.selected { background-color: #28a745; color: white; font-weight: bold; }
-    .calendar-header { font-weight: bold; background-color: #e9ecef; text-align: center; padding: 10px 0; }
-    .month-nav { display: flex; justify-content: space-between; align-items: center; }
-    .month-nav button { margin: 5px; }
-    .badge { font-size: 0.75rem; margin-top: 5px; display: block; }
-  </style>
 </head>
-<body class="p-4">
-<div class="container">
-  <h4>Create Available Dates</h4>
-  <div id="response-msg"></div>
-  <form method="post" id="available-dates-form">
-    <div class="form-group">
-      <label for="selected-dates">Selected Dates and Slots:</label>
-      <div id="dateInputs"></div>
-    </div>
-    <div class="form-group">
-      <label>Select Dates from Calendar</label>
-      <div class="month-nav">
-        <button type="button" id="prevMonth" class="btn btn-outline-secondary btn-sm">Previous</button>
-        <h5 id="calendar-header" class="mb-0"></h5>
-        <button type="button" id="nextMonth" class="btn btn-outline-secondary btn-sm">Next</button>
+<body>
+<div class="container mb-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="d-flex align-items-center mb-3">
+        <i class="fas fa-calendar-plus fa-lg text-primary mr-2"></i>
+        <h4 class="mb-0 text-primary font-weight-bold">Create Available Dates</h4>
       </div>
-      <div id="calendar"></div>
+
+      <div id="response-msg"></div>
+
+      <form method="post" id="available-dates-form">
+        <div class="form-group">
+          <label for="selected-dates" class="font-weight-bold">Selected Dates and Slots:</label>
+          <div id="dateInputs" class="p-2 bg-light rounded border"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="font-weight-bold">Select Dates from Calendar</label>
+          <div class="month-nav">
+            <button type="button" id="prev" class="btn btn-outline-secondary btn-sm">
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <h5 id="calendar-header" class="mb-0 text-center font-weight-bold"></h5>
+            <button type="button" id="next" class="btn btn-outline-secondary btn-sm">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div id="calendar"></div>
+        </div>
+
+        <div class="text-right">
+          <button type="submit" class="btn btn-primary mt-3 px-4">
+            <i class="fas fa-check-circle mr-1"></i> Submit Available Dates
+          </button>
+        </div>
+      </form>
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Submit Available Dates</button>
-  </form>
+  </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -178,10 +249,32 @@ function generateCalendar(month, year) {
     }
     calendar.append(cell);
   }
-}
 
-$('#prevMonth').click(() => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } generateCalendar(currentMonth, currentYear); });
-$('#nextMonth').click(() => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } generateCalendar(currentMonth, currentYear); });
+  // 🔁 Rebind previous and next button events
+}
+$(document).ready(function () {
+  // Global delegated handlers
+  $(document).on('click', '#prev', function () {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    generateCalendar(currentMonth, currentYear);
+  });
+
+  $(document).on('click', '#next', function () {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    generateCalendar(currentMonth, currentYear);
+  });
+});
+
+// $('#prevMonth').click(() => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } generateCalendar(currentMonth, currentYear); });
+// $('#nextMonth').click(() => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } generateCalendar(currentMonth, currentYear); });
 
 $(document).on('click', '.remove-btn', function () {
   const parent = $(this).closest('[data-date]');

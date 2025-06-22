@@ -75,48 +75,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
 </head>
 <body class="p-4"></body>
 <!-- ✅ Commendation Form UI -->
-<div class="container">
-    <h3>Commendation Form</h3>
-    <button type="button" class="btn btn-secondary mb-3" onclick="$('#content-area').load('residents_select_form.php')">
-        ← Back to Form Selector
-    </button>
-
-    <form id="commendation-form">
-        <div class="form-group">
-            <label for="appointment_id">Select Completed Appointment:</label>
-            <select name="appointment_id" class="form-control" required>
-                <option value="">-- Select Appointment --</option>
-                <?php foreach ($appointments as $appt): ?>
-                    <option value="<?= $appt['appointment_id'] ?>">
-                        <?= $appt['department_name'] . ' - ' . date('F d, Y h:i A', strtotime($appt['scheduled_for'])) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+<div class="container my-4">
+    <div class="card shadow-lg rounded-lg border-0">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-thumbs-up mr-2"></i> Commendation Form</h4>
+            <button type="button" class="btn btn-light btn-sm" onclick="$('#content-area').load('residents_select_form.php')">
+                ← Back to Form Selector
+            </button>
         </div>
 
-        <div class="form-group">
-            <label for="employee_name">Name of Employee:</label>
-            <input type="text" name="employee_name" class="form-control" required>
-        </div>
+        <div class="card-body">
+            <form id="commendation-form">
+                <div class="form-group">
+                    <label for="appointment_id" class="font-weight-bold">Select Completed Appointment:</label>
+                    <select name="appointment_id" class="form-control custom-select" required>
+                        <option value="">-- Select Appointment --</option>
+                        <?php foreach ($appointments as $appt): ?>
+                            <option value="<?= $appt['appointment_id'] ?>">
+                                <?= $appt['department_name'] . ' - ' . date('F d, Y h:i A', strtotime($appt['scheduled_for'])) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
 
-        <div class="form-group">
-            <label for="office">Office:</label>
-            <input type="text" name="office" class="form-control">
-        </div>
+                <div class="form-group">
+                    <label for="employee_name" class="font-weight-bold">Name of Employee:</label>
+                    <input type="text" name="employee_name" class="form-control" placeholder="e.g., Juan Dela Cruz" required>
+                </div>
 
-        <div class="form-group">
-            <label for="service_requested">Service Requested / Data:</label>
-            <input type="text" name="service_requested" class="form-control">
-        </div>
+                <div class="form-group">
+                    <label for="office" class="font-weight-bold">Office:</label>
+                    <input type="text" name="office" class="form-control" placeholder="e.g., Civil Registry">
+                </div>
 
-        <div class="form-group">
-            <label for="commendation_text">Brief Narration of Commendable Act:</label>
-            <textarea name="commendation_text" rows="4" class="form-control" required></textarea>
-        </div>
+                <div class="form-group">
+                    <label for="service_requested" class="font-weight-bold">Service Requested / Data:</label>
+                    <input type="text" name="service_requested" class="form-control" placeholder="e.g., Birth Certificate Issuance">
+                </div>
 
-        <button type="submit" class="btn btn-success">Submit Commendation</button>
-    </form>
+                <div class="form-group">
+                    <label for="commendation_text" class="font-weight-bold">Brief Narration of Commendable Act:</label>
+                    <textarea name="commendation_text" rows="4" class="form-control" placeholder="Describe what made the employee commendable..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block py-2 mt-3">
+                    <i class="fas fa-paper-plane"></i> Submit Commendation
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
+
 
 <!-- ✅ AJAX Submission -->
 <script>
