@@ -25,6 +25,51 @@ $departments = $stmt->fetchAll();
             padding: 0.4em 0.6em;
             cursor: pointer;
         }
+        <style>
+        .modal-header {
+            background-color: #5a5cb7;
+            color: white;
+            border-top-left-radius: 0.3rem;
+            border-top-right-radius: 0.3rem;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .modal-body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-bottom-left-radius: 0.3rem;
+            border-bottom-right-radius: 0.3rem;
+        }
+
+        .modal-body p strong {
+            color: #343a40;
+        }
+
+        .modal-body ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .modal-body ul li::before {
+            content: "✔️";
+            margin-right: 8px;
+            color: #5a5cb7;
+        }
+
+        .close {
+            color: white;
+            opacity: 0.8;
+        }
+
+        .close:hover {
+            color: #fff;
+            opacity: 1;
+        }
+</style>
     </style>
 </head>
 <body class="p-4">
@@ -75,8 +120,6 @@ $departments = $stmt->fetchAll();
                                     <li><?= htmlspecialchars($svc) ?></li>
                                 <?php endforeach; ?>
                             </ul>
-                            <button class="btn btn-sm btn-warning mt-2" data-toggle="modal" data-target="#editModal<?= $d['id'] ?>">Edit</button>
-
                         </div>
                     </div>
                 </div>

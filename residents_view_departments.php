@@ -8,7 +8,7 @@
     <style>
         .calendar-day.available { background-color: #e6ffe6; cursor: pointer; }
         .calendar-day.available:hover { background-color: #ccffcc; }
-        .calendar-day.selected { background-color: #28a745 !important; color: white; font-weight: bold; }
+        .calendar-day.selected { background-color:rgba(40, 167, 70, 0.68) !important; color: white; font-weight: bold; }
         .card:hover {
             transform: scale(1.03);
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
@@ -20,9 +20,43 @@
             grid-template-columns: repeat(7, 1fr);
             gap: 5px;
         }
-        .modal-dialog { max-width: 90vw; }
-        .modal-body { max-height: 80vh; overflow-y: auto; }
+        .calendar-day {
+            min-height: 80px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+        .modal-dialog { max-width:45vw; }
+        .modal-body {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
         .badge { font-size: 0.75rem; display: block; }
+        .modal-content {
+        transition: all 0.3s ease-in-out;
+        }
+        .modal-header {
+        border-bottom: none;
+        }
+        .modal-body p {
+            font-size: 1rem;
+        }
+        .custom-width {
+            max-width: 450px; /* You can adjust to 500px or 550px if still too wide */
+        }
+        .enlarged-badge {
+            font-size: 0.9rem;         /* Increase text size */
+            padding: 0.6em 1em;       /* More padding inside badge */
+            border-radius: 20px;      /* Pill shape */
+            background-color: #17a2b8; /* Keep info color */
+            color: #fff;
+        }
+
+        
+
     </style>
 </head>
 <body class="p-4">
@@ -54,7 +88,7 @@ $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="row" id="departmentList">
         <?php foreach ($departments as $d): ?>
-            <div class="col-md-4 mb-3 department-card" data-search="<?= strtolower($d['name'] . ' ' . $d['description'] . ' ' . $d['services']) ?>">
+            <div class="col-md-4 mb-3 department-card">
                 <div class="card h-100" data-toggle="modal" data-target="#deptModal<?= $d['id'] ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($d['name']) ?></h5>
@@ -68,26 +102,39 @@ $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <div class="modal fade" id="deptModal<?= $d['id'] ?>" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title"><?= htmlspecialchars($d['name']) ?></h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>Description:</strong> <?= htmlspecialchars($d['description']) ?></p>
-                            <p><strong>Services:</strong></p>
-                            <ul>
-                                <?php foreach (explode(',', $d['services']) as $svc): ?>
-                                    <li><?= htmlspecialchars(trim($svc)) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <button class="btn btn-primary btn-block mt-3" data-toggle="modal" data-target="#appointmentModal" data-dismiss="modal" onclick="openBooking(<?= $d['id'] ?>)">Book Appointment</button>
-                        </div>
-                    </div>
-                </div>
+
+    <div class="modal fade" id="deptModal<?= $d['id'] ?>" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered custom-width">
+        <div class="modal-content shadow-lg rounded-3 border-0">
+        <div class="modal-header bg-primary text-white rounded-top">
+            <h5 class="modal-title font-weight-bold"><?= htmlspecialchars($d['name']) ?></h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body p-4">
+            <p class="mb-3"><strong class="text-secondary">Description:</strong><br>
+            <span class="text-dark"><?= htmlspecialchars($d['description']) ?></span>
+            </p>
+
+            <p class="mb-2"><strong class="text-secondary">Services Offered:</strong></p>
+            <div class="mb-3">
+            <?php foreach (explode(',', $d['services']) as $svc): ?>
+                <span class="badge badge-pill badge-info mr-1 mb-1 enlarged-badge"><?= htmlspecialchars(trim($svc)) ?></span>
+            <?php endforeach; ?>
             </div>
+
+            <div class="text-center">
+            <button class="btn btn-outline-primary px-4 py-2" data-toggle="modal" data-target="#appointmentModal"
+                data-dismiss="modal" onclick="openBooking(<?= $d['id'] ?>)">
+                <i class='bx bx-calendar'></i> Book Appointment
+            </button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
         <?php endforeach; ?>
     </div>
 </div>

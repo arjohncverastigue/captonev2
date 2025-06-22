@@ -161,9 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <!-- Logo and Header -->
         <div class="login-logo">
-            <img src="images/logo.jpg" alt="Logo">
+            <img src="images/logo.png" style="width: 80px; height: 80px;" alt="Logo">
         </div>
-        <h2>Login to LGU QuickAppoint</h2>
+        <h2 style="color: #27548A;" >Login to LGU QuickAppoint</h2>
 
         <!-- Login Form -->
         <form method="POST">

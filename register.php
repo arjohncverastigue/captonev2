@@ -89,141 +89,171 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Register | LGU QuickAppoint</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
-                url('images/background.png') no-repeat center center/cover;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .register-container {
-            
-            padding: 40px;
-            border-radius: 10px;
-            
-            width: 90%;
-            max-width: 1300px;
-            
-        }
-        .register-container h2 {
-            text-align: center;
-            font-weight: bold;
-            color: #5a5cb7;
-            margin-bottom: 25px;
-        }
-        .form-control {
-            border-radius: 20px;
-            padding: 10px 15px;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            border-radius: 20px;
-            margin: 0 auto;
-            width: 25%;
-            padding: 10px;
-            display: block;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-        .login-link {
-            text-align: center;
-            display: block;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - LGU QuickAppoint</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+        url('images/background.png') no-repeat center center/cover;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .register-container {
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 10px;
+      background: white;
+      max-width: 1000px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .register-container h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #5a5cb7;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+      border-radius: 20px;
+      padding: 10px 15px;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      border-radius: 20px;
+      margin-top: 1.5rem;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+
+    .login-link {
+      text-align: center;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .col-md-6 {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
 </head>
-<body class="p-4">
+<body>
+  <div class="container-fluid">
     <div class="register-container">
-        <h2>Register for LGU QuickAppoint</h2>
-        <form method="POST" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-6">
-                    <!-- Name Fields -->
-                    <div class="form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" name="first_name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="middle_name">Middle Name</label>
-                        <input type="text" name="middle_name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" name="last_name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" name="address" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="birthday">Birthday</label>
-                        <input type="date" name="birthday" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="age">Age</label>
-                        <input type="number" name="age" class="form-control" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <!-- Account Fields -->
-                    <div class="form-group">
-                        <label for="sex">Sex</label>
-                        <select name="sex" class="form-control" required>
-                            <option value="">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="civil_status">Civil Status</label>
-                        <select name="civil_status" class="form-control" required>
-                            <option value="">Select</option>
-                            <option value="Single">Single</option>
-                            <option value="Married">Married</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="valid_id_type">Valid ID Type</label>
-                        <select name="valid_id_type" class="form-control" required>
-                            <option value="">Select ID Type</option>
-                            <option value="PhilSys ID">PhilSys ID</option>
-                            <option value="TIN ID">TIN ID</option>
-                            <option value="PhilHealth ID">PhilHealth ID</option>
-                            <option value="Driver's License">Driver's License</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="valid_id_image">Upload Valid ID</label>
-                        <input type="file" name="valid_id_image" class="form-control-file" accept="image/*" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="selfie_image">Upload Selfie</label>
-                        <input type="file" name="selfie_image" class="form-control-file" accept="image/*" required>
-                    </div>
-                </div>
+      <h2>Register for LGU QuickAppoint</h2>
+      <form method="POST" enctype="multipart/form-data">
+        <div class="row">
+          <!-- Left Column -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="first_name">First Name</label>
+              <input type="text" name="first_name" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-            <a href="index.php" class="login-link">Already have an account? Login Here</a>
-        </form>
+            <div class="form-group">
+              <label for="middle_name">Middle Name</label>
+              <input type="text" name="middle_name" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="last_name">Last Name</label>
+              <input type="text" name="last_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input type="text" name="address" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="birthday">Birthday</label>
+            <input type="date" name="birthday" id="birthday" class="form-control" required>
+            </div>
+            <div class="form-group">
+            <label for="age">Age</label>
+                <input type="number" name="age" id="age" class="form-control" readonly required>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="sex">Sex</label>
+              <select name="sex" class="form-control" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="civil_status">Civil Status</label>
+              <select name="civil_status" class="form-control" required>
+                <option value="">Select</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="valid_id_type">Valid ID Type</label>
+              <select name="valid_id_type" class="form-control" required>
+                <option value="">Select ID Type</option>
+                <option value="PhilSys ID">PhilSys ID</option>
+                <option value="TIN ID">TIN ID</option>
+                <option value="PhilHealth ID">PhilHealth ID</option>
+                <option value="Driver's License">Driver's License</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="valid_id_image">Upload Valid ID</label>
+              <input type="file" name="valid_id_image" class="form-control-file" accept="image/*" required>
+            </div>
+            <div class="form-group">
+              <label for="selfie_image">Upload Selfie</label>
+              <input type="file" name="selfie_image" class="form-control-file" accept="image/*" required>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a href="index.php" class="login-link">Already have an account? Login Here</a>
+      </form>
     </div>
+  </div>
+  <script>
+    document.getElementById('birthday').addEventListener('change', function () {
+        const birthDate = new Date(this.value);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age--;
+        }
+
+        if (!isNaN(age)) {
+        document.getElementById('age').value = age;
+        } else {
+        document.getElementById('age').value = '';
+        }
+    });
+</script>
 </body>
 </html>

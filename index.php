@@ -83,8 +83,8 @@
 
   nav ul li a:hover,
   nav ul li a:focus {
-    color:rgb(0, 31, 115);
-    border-bottom: 2px solid #001e65;
+    color:#2299ee;
+    border-bottom: 2px solid #2299ee;
   }
 
   /* Main content */
@@ -158,7 +158,7 @@
 
   footer .contacts ul li a:hover,
   footer .contacts ul li a:focus {
-    color:rgb(0, 29, 102);
+    color: #2299ee;
     
   }
 
@@ -196,7 +196,7 @@
 </head>
 <body>
 <header>
-  <img src="images/LGU_logo_inverted.png" alt="LGU Logo" class="logo" style="width: 70px; height: 70px; border-radius: 50%; margin-top: -16px; margin-bottom: -15px;" tabindex="0">
+  <div class="logo" tabindex="0" style="color: #023e8a;">LGU Quick Appoint</div>
   <nav>
     <ul>
       <li><a href="register.php" tabindex="0">Register</a></li>
@@ -204,9 +204,49 @@
     </ul>
   </nav>
 </header>
-<main>
-  <h1>Welcome to LGU Quick Appoint</h1>
+<main style="
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg,rgba(224, 247, 250, 0.14), #ffffff);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+">
+ <img src="images/logo.png" alt="LGU Logo" class="logo" style="border: 1px; width: 100px; height: 100px; border-radius: 50%; margin-top: -16px; margin-bottom: -15px;" tabindex="0">
+  <h1 style="
+    font-size: 2.5rem;
+    color: #0077b6;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 2px rgba(0, 119, 182, 0.1);
+  ">
+    Welcome to <span style="color: #023e8a;">LGU Quick Appoint</span>
+  </h1>
+  <p style="
+    font-size: 1.2rem;
+    color: #333;
+    max-width: 600px;
+  ">
+    Book appointments with your local government units quickly and easily.
+    Empowering residents with efficient and transparent public service.
+  </p>
+  <a href="register.php" style="
+    margin-top: 2rem;
+    display: inline-block;
+    background-color: #0077b6;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  " onmouseover="this.style.backgroundColor='#023e8a'" onmouseout="this.style.backgroundColor='#0077b6'">
+    Get Started
+  </a>
 </main>
+
 <footer>
   <section class="about">
     <h3 style="color: white;">About the system</h3>

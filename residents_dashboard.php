@@ -44,12 +44,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
             align-items: center;
             justify-content: space-between;
             padding: 0 1rem;
-            background-color: var(--white-color);
+            background-image: linear-gradient(to right, #0D92F4, #27548A);
             z-index: 100;
         }
 
         .header_toggle {
-            color: var(--first-color);
+            color:  #27548A;
             font-size: 1.5rem;
             cursor: pointer;
         }
@@ -66,7 +66,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
             left: -250px;
             width: 250px;
             height: 100vh;
-            background-color: var(--first-color);
+            background-color: #0D92F4;
             padding: 1rem 0;
             transition: 0.5s;
             z-index: 100;
@@ -85,12 +85,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
         .nav_link {
             color: var(--white-color);
             padding: 1rem 1.5rem;
-            text-decoration: none;
+            text-decoration: none !important;
         }
 
         .nav_link:hover {
             background-color: rgba(255, 255, 255, 0.5);
             border-radius: 5px;
+            text-decoration: none !important;
         }
 
         .show {
@@ -105,6 +106,24 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
             margin-top: var(--header-height);
             padding: 10px;
             transition: 0.5s;
+        }
+        .card{
+         transition: transform 0.2s ease, box-shadow 0.2s ease;
+         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease; /* smooth effect */
+        }
+        .card-header{
+            background-image: linear-gradient(to right, #0D92F4, #27548A);
+        }
+        #sidebar-logo{
+            display:block;
+            margin:0 auto 10px auto;
+            width:120px; height:auto;
+            max-width:80%; 
         }
     </style>
     <script>
@@ -140,6 +159,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
 
     <!-- Sidebar -->
     <div class="l-navbar" id="nav-bar">
+        <img src="images/Unisan_logo.png" id= "sidebar-logo" alt="Sidebar Logo" class="header_img">
         <h4 style="text-align: center; color: white;">Residents Menu</h4>
         <nav class="nav">
             <a href="#" class="nav_link" onclick="loadContent('residents_matching_appointments.php')">
@@ -158,23 +178,80 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Residents') {
     </div>
 
     <!-- Content Area -->
-    <div class="content-area" id="content-area">
-        <h3>Welcome to Your Dashboard!</h3>
-        <p>
-            <?php if (isset($_SESSION['user_name'])): ?>
-                Hello, <strong><?php echo $_SESSION['user_name']; ?></strong>! Welcome to your personal dashboard.
-            <?php else: ?>
-                Hello, <strong>Resident</strong>! Welcome to your personal dashboard.
-            <?php endif; ?>
-        </p>
-        <p>Use the menu on the left to navigate through the dashboard:</p>
-        <ul>
-            <li><strong>View Appointments</strong>: View the status and details of your past or upcoming appointments.</li>
-            <li><strong>View Departments</strong>: View all the departments, details and request a new appointment.</li>
-            <li><strong>Resident Feedback</strong>: Submit feedback about your completed appointments to help us improve our service.</li>
-            <li><strong>Logout</strong>: Logout safely.</li>
-        </ul>
+<div class="content-area" id="content-area">
+    <div class="container mt-4">
+        <div class="card shadow-lg border-0 rounded-lg">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0"><i class='bx bx-home-alt'></i> Welcome to Resident Dashboard</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">
+                    <?php if (isset($_SESSION['user_name'])): ?>
+                        Hello, <strong><?php echo $_SESSION['user_name']; ?></strong>! Welcome to your personal dashboard.
+                    <?php else: ?>
+                        Hello, <strong>Resident</strong>! Welcome to your personal dashboard.
+                    <?php endif; ?>
+                </p>
+                <p>Use the menu on the left or the options below to manage your appointments and provide feedback:</p>
+
+                <div class="row">
+                    <!-- View Appointments -->
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 shadow-sm border-left-primary p-3 hover-card" onclick="loadContent('resident_view_appointments.php')" style="cursor: pointer;">
+                            <div class="d-flex align-items-center">
+                                <i class='bx bx-calendar bx-lg text-primary me-3'></i>
+                                <div>
+                                    <h5 class="mb-0">View Appointments</h5>
+                                    <small>Check status and details of past or upcoming appointments</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View Departments -->
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 shadow-sm border-left-success p-3 hover-card" onclick="loadContent('view_departments.php')" style="cursor: pointer;">
+                            <div class="d-flex align-items-center">
+                                <i class='bx bx-building-house bx-lg text-success me-3'></i>
+                                <div>
+                                    <h5 class="mb-0">View Departments</h5>
+                                    <small>Explore departments and request appointments</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Feedback -->
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 shadow-sm border-left-warning p-3 hover-card" onclick="loadContent('submit_feedback.php')" style="cursor: pointer;">
+                            <div class="d-flex align-items-center">
+                                <i class='bx bx-message-square-dots bx-lg text-warning me-3'></i>
+                                <div>
+                                    <h5 class="mb-0">Resident Feedback</h5>
+                                    <small>Share your experience with past appointments</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logout -->
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 shadow-sm border-left-danger p-3 hover-card" onclick="window.location.href='logout.php'" style="cursor:pointer;">
+                            <div class="d-flex align-items-center">
+                                <i class='bx bx-log-out bx-lg text-danger me-3'></i>
+                                <div>
+                                    <h5 class="mb-0">Logout</h5>
+                                    <small>Click here to safely logout of your account</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- row -->
+            </div>
+        </div>
     </div>
+</div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
 </body>
