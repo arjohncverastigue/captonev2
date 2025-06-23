@@ -139,10 +139,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
             background-image: linear-gradient(to right, #0D92F4, #27548A);
         }
         .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         .card:hover {
+<<<<<<< Updated upstream
         transform: scale(1.03);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
@@ -215,6 +216,32 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
         transform: scale(1.2);
     }
         
+=======
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-submenu {
+    display: none;
+    flex-direction: column;
+    margin-left: 25px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255,255,255,0.3);
+}
+
+.sub_link {
+    font-size: 14px;
+    color: #fff;
+    padding: 0.5rem 1.5rem;
+    text-decoration: none !important;
+}
+
+.sub_link:hover {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 5px;
+}
+
+>>>>>>> Stashed changes
     </style>
 
     <script>
@@ -240,6 +267,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
         function loadContent(page) {
             $("#content-area").load(page);
         }
+<<<<<<< Updated upstream
         function toggleProfileMenu() {
             const menu = document.getElementById("profileMenu");
             menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
@@ -253,6 +281,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
             menu.style.display = "none";
             }
         });
+=======
+
+        function toggleDropdown() {
+    const dropdown = document.getElementById('feedbackDropdown');
+    dropdown.style.display = (dropdown.style.display === 'flex') ? 'none' : 'flex';
+}
+>>>>>>> Stashed changes
     </script>
 </head>
 <body id="body-pd">
@@ -289,29 +324,39 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
         <img src="images/Unisan_logo.png" id= "sidebar-logo" alt="Sidebar Logo" class="header_img">
         <h4 style="text-align: center; color: white;">Admin Menu</h4>
         <nav class="nav">
-            <a href="#" class="nav_link" onclick="loadContent('admin_analytics.php')">
-                <i class='bx bx-home-alt'></i> <span>Dashboard</span>
-            </a>
-            <a href="#" class="nav_link" onclick="loadContent('admin_create_lgu_personnel.php')">
-                <i class='bx bx-user-plus'></i> <span>Manage LGU Personnel</span>
-            </a>
-            <a href="#" class="nav_link" onclick="loadContent('admin_manage_departments.php')">
-                <i class='bx bx-building-house'></i> <span>Manage Department</span>
-            </a>
-            <a href="#" class="nav_link" onclick="loadContent('admin_view_feedback.php')">
-                <i class='bx bx-message-rounded-dots'></i> <span>View Feedback</span>
-            </a>
-            <a href="#" class="nav_link" onclick="loadContent('admin_view_appointments.php')">
-                <i class='bx bx-calendar-event'></i> <span>View Appointments</span>
-            </a>
-            <a href="#" class="nav_link" onclick="loadContent('admin_manage_residents_accounts.php')">
-                <i class='bx bx-group'></i> <span>Manage Residents Accounts</span>
-            </a>
+    <a href="#" class="nav_link" onclick="loadContent('admin_analytics.php')">
+        <i class='bx bx-home-alt'></i> <span>Dashboard</span>
+    </a>
+    <a href="#" class="nav_link" onclick="loadContent('admin_create_lgu_personnel.php')">
+        <i class='bx bx-user-plus'></i> <span>Manage LGU Personnel</span>
+    </a>
+    <a href="#" class="nav_link" onclick="loadContent('admin_manage_departments.php')">
+        <i class='bx bx-building-house'></i> <span>Manage Department</span>
+    </a>
 
-            <a href="logout.php" class="nav_link">
-                <i class='bx bx-log-out'></i> <span>Logout</span>
-            </a>
-        </nav>
+    <!-- Dropdown toggle -->
+    <a href="javascript:void(0);" class="nav_link" onclick="toggleDropdown()">
+        <i class='bx bx-message-rounded-dots'></i> <span>Select Feedback</span> <i class='bx bx-chevron-down ml-auto'></i>
+    </a>
+
+    <!-- Dropdown submenu -->
+    <div id="feedbackDropdown" class="dropdown-submenu">
+        <a href="#" class="nav_link sub_link" onclick="loadContent('admin_view_feedback.php')">Service Feedback</a>
+        <a href="#" class="nav_link sub_link" onclick="loadContent('admin_view_commendations.php')">Personnel Feedback</a>
+        <a href="#" class="nav_link sub_link" onclick="loadContent('admin_view_complaints.php')">System Feedback</a>
+    </div>
+
+    <a href="#" class="nav_link" onclick="loadContent('admin_view_appointments.php')">
+        <i class='bx bx-calendar-event'></i> <span>View Appointments</span>
+    </a>
+    <a href="#" class="nav_link" onclick="loadContent('admin_manage_residents_accounts.php')">
+        <i class='bx bx-group'></i> <span>Manage Residents Accounts</span>
+    </a>
+    <a href="logout.php" class="nav_link">
+        <i class='bx bx-log-out'></i> <span>Logout</span>
+    </a>
+</nav>
+
 
     </div>
 

@@ -40,15 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
     if ($appointmentId && $employeeName && !empty($complaints)) {
         try {
             $stmtInsert = $pdo->prepare("INSERT INTO complaints 
-                (user_id, employee_name, office, complaint_type, additional_details)
-                VALUES (:user_id, :employee_name, :office, :complaint_type, :additional_details)");
+            (user_id, appointment_id, employee_name, office, complaint_type, additional_details)
+            VALUES (:user_id, :appointment_id, :employee_name, :office, :complaint_type, :additional_details)");
             $stmtInsert->execute([
-                'user_id' => $userId,
-                'employee_name' => $employeeName,
-                'office' => $office,
-                'complaint_type' => implode(', ', $complaints),
-                'additional_details' => $additional
-            ]);
+            'user_id' => $userId,
+            'appointment_id' => $appointmentId,
+            'employee_name' => $employeeName,
+            'office' => $office,
+            'complaint_type' => implode(', ', $complaints),
+            'additional_details' => $additional
+        ]);
+
 
             $stmtUpdate = $pdo->prepare("UPDATE appointments SET complaint_status = 'done' WHERE id = :appointment_id");
             $stmtUpdate->execute(['appointment_id' => $appointmentId]);

@@ -41,15 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
         try {
             // Insert commendation (created_at will be set automatically)
             $stmtInsert = $pdo->prepare("INSERT INTO commendations 
-                (user_id, employee_name, office, service_requested, commendation_text)
-                VALUES (:user_id, :employee_name, :office, :service_requested, :commendation_text)");
+            (user_id, appointment_id, employee_name, office, service_requested, commendation_text)
+            VALUES (:user_id, :appointment_id, :employee_name, :office, :service_requested, :commendation_text)");
             $stmtInsert->execute([
-                'user_id' => $userId,
-                'employee_name' => $employeeName,
-                'office' => $office,
-                'service_requested' => $service,
-                'commendation_text' => $commendation
-            ]);
+            'user_id' => $userId,
+            'appointment_id' => $appointmentId,
+            'employee_name' => $employeeName,
+            'office' => $office,
+            'service_requested' => $service,
+            'commendation_text' => $commendation
+        ]);
 
             // Update appointment status
             $stmtUpdate = $pdo->prepare("UPDATE appointments SET commendation_status = 'done' WHERE id = :appointment_id");
